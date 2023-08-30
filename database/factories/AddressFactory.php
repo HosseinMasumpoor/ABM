@@ -23,7 +23,8 @@ class AddressFactory extends Factory
             'address' => 'میدان هفت تیر خیابان فاطمی کوچه نرگس2 پلاک 14 واحد 2',
             'latitude' => $this->faker->numberBetween(200, 260),
             'longitude' => $this->faker->numberBetween(200, 260),
-            'title' => $titles->random()
+            'title' => $titles->random(),
+            'name' => 'حسین معصوم پور'
         ];
     }
 }

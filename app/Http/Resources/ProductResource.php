@@ -17,6 +17,7 @@ class ProductResource extends JsonResource
         return [
             "id" => $this->id,
             "slug" => $this->slug,
+            "rate" => $this->rate,
             "name" => $this->name,
             "category" => new CategoryResource($this->category->load('parent')),
             "brand" => new BrandResource($this->brand),
@@ -30,7 +31,7 @@ class ProductResource extends JsonResource
             "color" => $this->color,
             "colorCode" => $this->colorCode,
             // 'comments' => $this->comments()->where('approved', true)->paginate(2),
-            'comments' => new CommentResourceCollection($this->comments()->where('approved', true)->paginate()),
+            'comments' => new CommentResourceCollection($this->comments()->where('approved', true)->paginate()->load('user')),
             "created_at" => $this->created_at
 
         ];

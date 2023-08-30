@@ -51,6 +51,11 @@ class Product extends Model
         return null;
     }
 
+    public function getRateAttribute()
+    {
+        return round($this->comments->avg('rate'), 1);
+    }
+
 
     public function scopeHasDiscount($query)
     {

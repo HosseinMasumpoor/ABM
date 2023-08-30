@@ -3,7 +3,9 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\UserController;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,10 +39,22 @@ Route::prefix('/categories')->group(function(){
     Route::get('/{category}', [CategoryController::class, 'show']);
 });
 
+Route::prefix('/profile')->group(function(){
+    Route::get('/information', [UserController::class, 'information']);
+    Route::get('/orders', [UserController::class, 'showOrders']);
+    Route::get('/addresses', [UserController::class, 'showAddresses']);
+    Route::get('/bookmarks', [UserController::class, 'showBookmarks']);
+    Route::get('/comments', [UserController::class, 'showComments']);
+});
+
 Route::get('/homepage/categories', [CategoryController::class, 'getHomepageCategories']);
 
 Route::get('/sliders', [SliderController::class, 'index']);
 
+
+Route::get('/test', function () {
+    auth()->loginUsingId(1);
+});
 
 
 
