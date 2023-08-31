@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Ybazli\Faker\Facades\Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Address>
@@ -16,15 +17,18 @@ class AddressFactory extends Factory
      */
     public function definition(): array
     {
-        $titles = collect(['خانه', 'خانه 2']);
+        $titles = collect(['خانه', 'خانه 2', 'محل کار']);
         return [
-            'province' => 'تهران',
-            'city' => 'تهران',
-            'address' => 'میدان هفت تیر خیابان فاطمی کوچه نرگس2 پلاک 14 واحد 2',
+            // 'province' => $provinces->random(),
+            'province' => Faker::state(),
+            'city' => Faker::city(),
+            'address' => Faker::address(),
             'latitude' => $this->faker->numberBetween(200, 260),
             'longitude' => $this->faker->numberBetween(200, 260),
             'title' => $titles->random(),
-            'name' => 'حسین معصوم پور'
+            'name' => Faker::fullName(),
+            'cellphone' => Faker::mobile(),
+            'postalCode' => '3190000000'
         ];
     }
 }

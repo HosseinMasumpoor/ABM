@@ -50,17 +50,54 @@ class DatabaseSeeder extends Seeder
 
         $users->add($user);
 
-        $brands = Brand::factory(10)->create();
+        $brandsName = collect([
+            'آرمانی',
+            'فندی',
+            'ورساچه',
+            'بربری',
+            'رالف لارن',
+            'شانل',
+            'پرادا',
+            'هرمس',
+            'گوچی',
+            'لویی ویتون',
+            'هرمس',
+        ]);
 
-        $parentCategories = Category::factory(10)->create();
+        $brands = collect();
+        foreach ($brandsName as $brandName) {
+            $brand = Brand::factory()->create([
+                'name' => $brandName
+            ]);
+            $brands->add($brand);
+        }
+
+
+        $parentCategories = collect();
+        $parentCategoriesName = collect(['مردانه', 'زنانه', 'بچگانه']);
+        $categoriesName = collect(['لباس', 'کفش', 'اکسسوری', 'ورزشی']);
+        foreach ($parentCategoriesName as $categoryName) {
+            $category = Category::factory()->create([
+                'name' => $categoryName,
+                // 'slug' => str($categoriesName)->slug()
+            ]);
+
+            $parentCategories->add($category);
+        }
 
         $categories = collect();
-        for ($i=0; $i < 15; $i++) {
-            $category = Category::factory()->create([
-                'parent_id' => $parentCategories->random()->id
-            ]);
-            $categories->add($category);
+
+        foreach ($parentCategories as $parentCategory) {
+            foreach ($categoriesName as $categoryName) {
+                $category = Category::factory()->create([
+                    'name' => $categoryName,
+                    // 'slug' => str($categoriesName)->slug(),
+                    'parent_id' => $parentCategory->id
+                ]);
+                $categories->add($category);
+            }
         }
+
 
         $subCategories = collect();
         for ($i=0; $i < 30; $i++) {
@@ -69,10 +106,15 @@ class DatabaseSeeder extends Seeder
             ]);
             $subCategories->add($category);
         }
-        $products = Product::factory(50)->create([
-            'category_id' => $subCategories->random()->id,
-            'brand_id' => $brands->random()->id
-        ]);
+
+        $products = collect();
+        for ($i=0; $i < 50; $i++) {
+            $product = Product::factory()->create([
+                'category_id' => $subCategories->random()->id,
+                'brand_id' => $brands->random()->id
+            ]);
+            $products->add($product);
+        }
 
         $sizes = ["sm", 'md', 'lg', 'xl', '2xl', '3xl'];
 
@@ -106,8 +148,6 @@ class DatabaseSeeder extends Seeder
 
             Address::factory(2)->create([
                 'user_id' => $user->id,
-                'cellphone' => '09111111111',
-                'postalCode' => '3190000000'
             ]);
         }
 
@@ -160,15 +200,13 @@ class DatabaseSeeder extends Seeder
 
 
         // my seeds
-        $brand = Brand::factory()->create([
-            'name' => 'هرمس',
-            'slug' => 'هرمس',
-        ]);
+        $brand = Brand::where('name', 'هرمس')->first();
 
-        $myParentCategory = Category::factory()->create([
-            'name' => 'زنانه',
-            'slug' => 'زنانه',
-        ]);
+        // $myParentCategory = Category::factory()->create([
+        //     'name' => 'زنانه',
+        //     'slug' => 'زنانه',
+        // ]);
+        $myParentCategory = Category::where('name', 'زنانه')->first();
         $myCategory = Category::factory()->create([
             'name' => 'لباس',
             'slug' => 'لباس-زنانه',

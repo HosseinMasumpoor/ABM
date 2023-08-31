@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Ybazli\Faker\Facades\Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Brand>
@@ -17,8 +18,8 @@ class BrandFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->title(),
-            'slug' => $this->faker->slug()
+            'name' => Faker::word(),
+            'slug' => $this->faker->unique()->slug()
         ];
     }
 }

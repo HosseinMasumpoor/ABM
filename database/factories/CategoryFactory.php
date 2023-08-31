@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Ybazli\Faker\Facades\Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
@@ -16,9 +17,33 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
+        $categories = collect([
+            'پیراهن',
+            'شلوار',
+            'جوراب',
+            'ساعت مچی',
+            'پالتو',
+            'کت',
+            'کت و شلوار',
+            'دستبند',
+            'کلاه',
+            'دستکش',
+            'کوهنوردی',
+            'مجلسی',
+            'ساعت هوشمند',
+            'ساعت آنالوگ',
+            'تاپ',
+            'تیشرت',
+            'پاشنه بلند',
+            'بلوز',
+            'کمربند',
+            'کیف',
+            'گردنبند',
+            'انگشتر'
+        ]);
         return [
-            'slug'=> $this->faker->slug(),
-            'name' => $this->faker->text('100'),
+            'slug'=> $this->faker->unique()->slug(),
+            'name' => $categories->random(),
         ];
     }
 }
