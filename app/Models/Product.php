@@ -42,6 +42,16 @@ class Product extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function setOffPriceAttribute($value)
+    {
+        if($value){
+            $this->attributes['offPrice'] = $value;
+        }
+        else{
+            $this->attributes['offPrice'] = $this->attributes['price'];
+        }
+    }
+
     public function getOffPercentAttribute()
     {
         if($this->offPrice)
@@ -59,7 +69,7 @@ class Product extends Model
 
     public function scopeHasDiscount($query)
     {
-        return $query->whereNotNull('offPrice')->where('off_date_from', '<', Carbon::now())->where('off_date_to', '>' , Carbon::now());
+        return $query->whereNotNull('offPrice')->whereColumn('offPrice', '<>', 'price')->where('off_date_from', '<', Carbon::now())->where('off_date_to', '>' , Carbon::now());
     }
 
     public function scopeTopOrders($query)
@@ -108,7 +118,7 @@ class Product extends Model
                 case 'bestselling':
                     $query->select('products.*')
                     ->join('sizes','products.id','=','sizes.product_id')
-                    ->join('order_items','sizes.id','=','order_items.size_id')
+                    ->leftJoin('order_items','sizes.id','=','order_items.size_id')
                     ->groupBy('products.id')
                     ->orderByRaw("COUNT(order_items.id) desc");
                     break;
@@ -120,10 +130,11 @@ class Product extends Model
                     $query->latest();
                     break;
                 case 'min':
-                    $query->orderByRaw('COALESCE(offPrice, price) ASC');
+                    // $query->orderByRaw('COALESCE(offPrice, price) ASC');
+                    $query->orderBy('offPrice');
                     break;
                 case 'max':
-                    $query->orderByRaw('COALESCE(offPrice, price) DESC');
+                    $query->orderBy('offPrice', 'desc');
                     break;
                 default:
                     # code...

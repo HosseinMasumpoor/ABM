@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $products = collect();
-        for ($i=0; $i < 50; $i++) {
+        for ($i=0; $i < 150; $i++) {
             $product = Product::factory()->create([
                 'category_id' => $subCategories->random()->id,
                 'brand_id' => $brands->random()->id
@@ -202,10 +202,6 @@ class DatabaseSeeder extends Seeder
         // my seeds
         $brand = Brand::where('name', 'هرمس')->first();
 
-        // $myParentCategory = Category::factory()->create([
-        //     'name' => 'زنانه',
-        //     'slug' => 'زنانه',
-        // ]);
         $myParentCategory = Category::where('name', 'زنانه')->first();
         $myCategory = Category::factory()->create([
             'name' => 'لباس',
