@@ -24,9 +24,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::prefix('/products')->group(function(){
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/show/{product}', [ProductController::class, 'show']);
+    Route::get('/show/{product}/comments', [ProductController::class, 'showComments']);
+
     Route::get('/filter/{category}', [ProductController::class, 'filter']);
     Route::get('/getfilters/{category}', [ProductController::class, 'getFilters']);
     Route::get('/discounts', [ProductController::class, 'getDiscounts']);
@@ -47,13 +50,22 @@ Route::prefix('/profile')->group(function(){
     Route::get('/comments', [UserController::class, 'showComments']);
 });
 
+Route::prefix('/admin')->group(function(){
+    Route::apiResource('sliders', SliderController::class);
+    Route::apiResource('products', ProductController::class);
+    Route::apiResource('categories', CategoryController::class);
+});
+
 Route::get('/homepage/categories', [CategoryController::class, 'getHomepageCategories']);
 
 Route::get('/sliders', [SliderController::class, 'index']);
 
 
 Route::get('/test', function () {
-    auth()->loginUsingId(1);
+    // auth()->loginUsingId(1);
+    $code = str_pad(11, 5, '0'). str_pad(222, 3, '0', STR_PAD_LEFT);
+
+    dd($code);
 });
 
 

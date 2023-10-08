@@ -3,7 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\PaginatedResourceResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\AbstractCursorPaginator;
+use Illuminate\Pagination\AbstractPaginator;
 
 class CommentResourceCollection extends ResourceCollection
 {
@@ -16,4 +19,5 @@ class CommentResourceCollection extends ResourceCollection
     {
         return parent::toArray($request);
     }
+
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('total_price');
             $table->tinyInteger('status')->default(0);
             $table->boolean('payment_status')->default(false);
+            $table->string('code')->unique()->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

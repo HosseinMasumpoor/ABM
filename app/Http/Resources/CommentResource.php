@@ -16,10 +16,11 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->whenLoaded('user', fn()=> $this->user->name),
+            'user' => $this->user->name,
             'rate' => $this->rate,
             'text' => $this->text,
-            'product' => $this->whenLoaded('product', fn()=> new ProductCardResource($this->product))
+            'product' => $this->whenLoaded('product', fn()=> new ProductCardResource($this->product)),
+            'time' => $this->created_at
         ];
     }
 }

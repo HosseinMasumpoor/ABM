@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CategoryResource;
+use App\Http\Responses\ErrorResponse;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -17,20 +18,28 @@ class CategoryController extends Controller
         return CategoryResource::collection($categories->load('subCategories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'slug' => 'required|unique:categories',
+            'parent_id' => 'nullable|exists:categories,id',
+            'icon' => 'nullable'
+        ]);
+
+        try {
+            $category = Category::create($request->all());
+        } catch (\Throwable $th) {
+            return new ErrorResponse($th, 'دسته بندی با موفقیت افزوده نشد');
+        }
+        return response([
+            'message' => 'دسته بندی با موفقیت افزوده شد',
+            'data' => $category
+        ]);
     }
 
     /**
@@ -42,19 +51,26 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'slug' => 'required|unique:categories,slug,'.$category->id,
+            'parent_id' => 'nullable|exists:categories,id',
+            'icon' => 'nullable'
+        ]);
+
+        try {
+            $category->update($request->all());
+        } catch (\Throwable $th) {
+            return new ErrorResponse($th, 'دسته بندی با موفقیت ویرایش نشد');
+        }
+        return response([
+            'message' => 'دسته بندی با موفقیت ویرایش شد',
+            'data' => $category
+        ]);
     }
 
     /**
@@ -62,7 +78,16 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        try{
+            $category->delete();
+        }
+        catch(\Throwable $th){
+            return new ErrorResponse($th, 'حذف دسته بندی با موفقیت انجام نشد');
+        }
+
+        return response([
+            'message' => 'دسته بندی با موفقیت حذف شد'
+        ]);
     }
 
     public function getHomepageCategories()

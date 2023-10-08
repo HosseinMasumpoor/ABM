@@ -112,6 +112,14 @@ class Product extends Model
             }
         }
 
+        if(request()->has('min')){
+            $query->where('offPrice', '>', request()->min);
+        }
+
+        if(request()->has('max')){
+            $query->where('offPrice', '<', request()->max);
+        }
+
         if(request()->has('sort')){
             $sort = request()->get('sort');
             switch ($sort) {
@@ -137,7 +145,7 @@ class Product extends Model
                     $query->orderBy('offPrice', 'desc');
                     break;
                 default:
-                    # code...
+                    $query->latest();
                     break;
             }
         }
