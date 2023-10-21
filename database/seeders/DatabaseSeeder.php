@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
 
 
         $subCategories = collect();
-        for ($i=0; $i < 30; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $category = Category::factory()->create([
                 'parent_id' => $categories->random()->id
             ]);
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $products = collect();
-        for ($i=0; $i < 150; $i++) {
+        for ($i = 0; $i < 150; $i++) {
             $product = Product::factory()->create([
                 'category_id' => $subCategories->random()->id,
                 'brand_id' => $brands->random()->id
@@ -169,7 +169,7 @@ class DatabaseSeeder extends Seeder
 
         $counter = 0;
         $productVariations = Size::all();
-        for ($i=0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $counter++;
             $selectedUser = $users->random();
             $order = Order::factory()->create([
@@ -177,12 +177,12 @@ class DatabaseSeeder extends Seeder
                 'address_id' => $selectedUser->addresses->random()->id,
                 'total_price' => 0
             ]);
-            $code = 1 . str_pad($order->id, 5, '0', STR_PAD_LEFT). str_pad($selectedUser->id, 3, '0', STR_PAD_LEFT);
+            $code = 1 . str_pad($order->id, 5, '0', STR_PAD_LEFT) . str_pad($selectedUser->id, 3, '0', STR_PAD_LEFT);
             $order->update([
                 'code' => $code
             ]);
             $totalPrice = 0;
-            for ($j=0; $j < random_int(1, 3); $j++) {
+            for ($j = 0; $j < random_int(1, 3); $j++) {
                 $selectedVariation = $productVariations->random();
                 $price = $selectedVariation->product->price;
                 $totalPrice += $price;
@@ -190,6 +190,8 @@ class DatabaseSeeder extends Seeder
                 OrderItem::factory()->create([
                     'order_id' => $order->id,
                     'size_id' => $selectedVariation->id,
+                    'product_id' => $selectedVariation->product,
+                    'size' => $selectedVariation->size,
                     'price' => $price,
                     'quantity' => $quantity,
                     'subtotal' => $price * $quantity,
@@ -198,7 +200,6 @@ class DatabaseSeeder extends Seeder
             $order->update([
                 'total_price' => $totalPrice
             ]);
-
         }
 
 
@@ -220,13 +221,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $product = Product::factory()->create([
-            'slug'=> 'مانتوی-زنانه-هرمس',
-            'name'=> 'مانتوی زنانه تابستانه هرمس',
-            'image'=> 'https://via.placeholder.com/640x480.png/0044ff?text=minima',
-            'price'=> 490000,
-            'offPrice'=> 450000,
-            'color'=> 'مشکی',
-            'colorCode'=> '#000000',
+            'slug' => 'مانتوی-زنانه-هرمس',
+            'name' => 'مانتوی زنانه تابستانه هرمس',
+            'image' => 'https://via.placeholder.com/640x480.png/0044ff?text=minima',
+            'price' => 490000,
+            'offPrice' => 450000,
+            'color' => 'مشکی',
+            'colorCode' => '#000000',
             'brand_id' => $brand->id,
             'category_id' => $mySubCategory->id
         ]);

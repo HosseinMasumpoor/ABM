@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\ErrorResponse;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
@@ -12,15 +13,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Brand::paginate(10);
     }
 
     /**
@@ -28,7 +21,22 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+        ]);
+        try {
+            $brand = Brand::create([
+                'name' => $request->name,
+                'slug' => $request->slug
+            ]);
+        } catch (\Throwable $th) {
+            return new ErrorResponse($th, 'برند به درستی ذخیره نشد', 500);
+        }
+
+        return response([
+            'message' => 'برند با موفقیت ایجاد شد',
+            'data' => $brand,
+        ]);
     }
 
     /**
@@ -40,19 +48,27 @@ class BrandController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Brand $brand)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Brand $brand)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        try {
+            $brand->update([
+                'name' => $request->name,
+                'slug' => $request->slug
+            ]);
+        } catch (\Throwable $th) {
+            return new ErrorResponse($th, 'برند به درستی ویرایش نشد', 500);
+        }
+
+        return response([
+            'message' => 'برند با موفقیت ویرایش شد',
+            'data' => $brand,
+        ]);
     }
 
     /**
@@ -60,6 +76,16 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+        try {
+            $brand->products()->delete();
+            $brand->delete();
+        } catch (\Throwable $th) {
+            $message = 'حذف برند با موفقیت انجام نشد';
+            return new ErrorResponse($th, $message, 500);
+        }
+
+        return response([
+            'message' => 'برند با موفقیت حذف شد'
+        ]);
     }
 }

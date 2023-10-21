@@ -6,11 +6,18 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Cviebrock\EloquentSluggable\Sluggable;
+
 
 class Product extends Model
 {
     use HasFactory;
+    use Sluggable;
     protected $guarded =  [];
+
+    /**
+     * Relations
+     */
 
     public function category()
     {
@@ -42,6 +49,10 @@ class Product extends Model
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * seters and geters
+     */
+
     public function setOffPriceAttribute($value)
     {
         if($value){
@@ -66,6 +77,9 @@ class Product extends Model
         return round($this->comments->avg('rate'), 1);
     }
 
+    /**
+     * Scopes
+     */
 
     public function scopeHasDiscount($query)
     {
@@ -149,5 +163,14 @@ class Product extends Model
                     break;
             }
         }
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Responses\ErrorResponse;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
 {
@@ -15,10 +16,8 @@ class SliderController extends Controller
      */
     public function index()
     {
-        $sliders = Slider::all();
+        $sliders = Slider::paginate(10);
         return $sliders;
-
-
     }
 
     /**
@@ -28,19 +27,18 @@ class SliderController extends Controller
     {
         $request->validate([
             'link' => "required|url",
-            'src' => "required",
+            'src' => "required|image:jpeg,png,jpg,gif,svg|max:2048",
         ]);
 
-
-
-        try{
+        $image = $request->file('src');
+        $src = $image->store(env('SLIDER_IMAGE_UPLOAD_PATH'), 'public');
+        try {
             $slider = Slider::create([
                 'link' => $request->link,
-                'src' => $request->src,
+                'src' => $src,
                 'type' => 'homepage-main'
             ]);
-        }
-        catch(\Throwable $ex){
+        } catch (\Throwable $ex) {
             $message = 'اسلایدر با موفقیت ایجاد نشد، دوباره تلاش کنید';
             return new ErrorResponse($ex, $message, 500);
         }
@@ -49,7 +47,6 @@ class SliderController extends Controller
             'message' => 'اسلایدر با موفقیت ساخته شد',
             'data' => $slider
         ]);
-
     }
 
     /**
@@ -65,15 +62,22 @@ class SliderController extends Controller
      */
     public function update(Request $request, Slider $slider)
     {
+        // dd(Storage::exists($slider->src), $slider->src);
         $request->validate([
-            'link' => "required|url",
-            'src' => "required",
+            'link' => "url",
+            'src' => "image:jpeg,png,jpg,gif,svg|max:2048",
         ]);
+
+        if ($request->has('src')) {
+            $image = $request->file('src');
+            $src = $image->store(env('SLIDER_IMAGE_UPLOAD_PATH'), 'public');
+            Storage::delete($slider->src);
+        }
 
         try {
             $slider->update([
                 'link' => $request->link,
-                'src' => $request->src,
+                'src' => $src ?? $slider->src,
             ]);
         } catch (\Throwable $th) {
             $message = 'متأسفانه ویرایش اسلایدر با موفقیت انجام نشد';
@@ -91,6 +95,7 @@ class SliderController extends Controller
     public function destroy(Slider $slider)
     {
         try {
+            Storage::delete($slider->src);
             $slider->delete();
         } catch (\Throwable $th) {
             $message = 'حذف اسلایدر با موفقیت انجام نشد';

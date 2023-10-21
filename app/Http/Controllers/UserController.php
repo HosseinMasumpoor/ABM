@@ -22,26 +22,26 @@ class UserController extends Controller
     public function showOrders()
     {
         $user = auth()->user() ?? User::find(3);
-        $orders = OrderResource::collection($user->orders);
+        $orders = OrderResource::collection($user->orders()->paginate(10));
         return $orders;
     }
 
     public function showBookmarks()
     {
         $user = auth()->user() ?? User::find(3);
-        return BookmarkResource::collection($user->bookmarks);
+        return BookmarkResource::collection($user->bookmarks()->paginate(10));
     }
 
     public function showAddresses()
     {
         $user = auth()->user() ?? User::find(3);
-        $addresses = AddressResource::collection($user->addresses);
+        $addresses = AddressResource::collection($user->addresses()->paginate(10));
         return $addresses;
     }
 
     public function showComments()
     {
         $user = auth()->user() ?? User::find(3);
-        return CommentResource::collection($user->comments->load('product'));
+        return CommentResource::collection($user->comments()->paginate(10));
     }
 }

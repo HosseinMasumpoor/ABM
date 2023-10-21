@@ -32,7 +32,7 @@ class ProductResource extends JsonResource
             "colorCode" => $this->colorCode,
             // 'comments' => $this->comments()->where('approved', true)->paginate(2),
             // "comments" => new CommentResourceCollection($this->comments()->where('approved', true)->paginate()->load('user')),
-            "comments" => new CommentResourceCollection($this->comments()->paginate()),
+            // "comments" => new CommentResourceCollection($this->comments()->paginate()),
             "created_at" => $this->created_at
 
         ];

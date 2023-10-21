@@ -22,6 +22,7 @@ class ProductCardResource extends JsonResource
             "price" => $this->price,
             "offPrice" => $this->offPrice,
             "offPercent" => $this->offPercent,
+            "category" => $this->category,
             "created_at" => $this->created_at
         ];
     }

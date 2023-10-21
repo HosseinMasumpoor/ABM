@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('image');
             $table->integer('price');
             $table->integer('offPrice')->nullable();
-            $table->timestamp('off_date_from');
-            $table->timestamp('off_date_to');
+            $table->timestamp('off_date_from')->nullable();
+            $table->timestamp('off_date_to')->nullable();
             $table->string('color');
             $table->string('colorCode');
             $table->timestamps();

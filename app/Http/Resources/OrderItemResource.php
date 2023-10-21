@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CommentResource extends JsonResource
+class OrderItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,12 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->user->name,
-            'rate' => $this->rate,
-            'text' => $this->text,
-            // 'product' => $this->whenLoaded('product', fn()=> new ProductCardResource($this->product)),
-            'product' => $this->product,
-            'time' => $this->created_at
+            'product' => new ProductCardResource($this->product),
+            'size' => $this->size,
+            'price' => $this->price,
+            'quantity' => $this->quantity,
+            'subtotal' => $this->subtotal,
+            'created_at' => $this->created_at
         ];
     }
 }

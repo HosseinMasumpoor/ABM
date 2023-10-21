@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
@@ -25,7 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::prefix('/products')->group(function(){
+Route::prefix('/products')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/show/{product}', [ProductController::class, 'show']);
     Route::get('/show/{product}/comments', [ProductController::class, 'showComments']);
@@ -37,12 +38,12 @@ Route::prefix('/products')->group(function(){
 });
 
 
-Route::prefix('/categories')->group(function(){
-    Route::get('/', [CategoryController::class, 'index']);
+Route::prefix('/categories')->group(function () {
+    Route::get('/', [CategoryController::class, 'showAll']);
     Route::get('/{category}', [CategoryController::class, 'show']);
 });
 
-Route::prefix('/profile')->group(function(){
+Route::prefix('/profile')->group(function () {
     Route::get('/information', [UserController::class, 'information']);
     Route::get('/orders', [UserController::class, 'showOrders']);
     Route::get('/addresses', [UserController::class, 'showAddresses']);
@@ -50,11 +51,13 @@ Route::prefix('/profile')->group(function(){
     Route::get('/comments', [UserController::class, 'showComments']);
 });
 
-Route::prefix('/admin')->group(function(){
+Route::prefix('/admin')->group(function () {
     Route::apiResource('sliders', SliderController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('brands', BrandController::class);
 });
+
 
 Route::get('/homepage/categories', [CategoryController::class, 'getHomepageCategories']);
 
@@ -62,14 +65,4 @@ Route::get('/sliders', [SliderController::class, 'index']);
 
 
 Route::get('/test', function () {
-    // auth()->loginUsingId(1);
-    $code = str_pad(11, 5, '0'). str_pad(222, 3, '0', STR_PAD_LEFT);
-
-    dd($code);
 });
-
-
-
-
-
-

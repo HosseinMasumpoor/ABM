@@ -12,11 +12,16 @@ class OrderItem extends Model
 
     public function order()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(Order::class);
     }
 
-    public function product_variations()
+    public function product_variation()
     {
-        return $this->hasMany(Size::class, 'size_id', 'id');
+        return $this->belongsTo(Size::class, 'size_id', 'id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }
