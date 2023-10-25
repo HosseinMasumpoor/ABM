@@ -18,5 +18,9 @@ class Image extends Model
     {
         return $this->belongsTo(Product::class);
     }
-}
 
+    public function getSrcAttribute()
+    {
+        return asset('storage/' . $this->attributes['src']);
+    }
+}

@@ -55,19 +55,17 @@ class Product extends Model
 
     public function setOffPriceAttribute($value)
     {
-        if($value){
+        if ($value) {
             $this->attributes['offPrice'] = $value;
-        }
-        else{
+        } else {
             $this->attributes['offPrice'] = $this->attributes['price'];
         }
     }
 
     public function getOffPercentAttribute()
     {
-        if($this->offPrice)
-        {
-           return round((($this->price - $this->offPrice ) / $this->price) *100);
+        if ($this->offPrice) {
+            return round((($this->price - $this->offPrice) / $this->price) * 100);
         }
         return null;
     }
@@ -77,76 +75,81 @@ class Product extends Model
         return round($this->comments->avg('rate'), 1);
     }
 
+    public function getImageAttribute()
+    {
+        return asset('storage/' . $this->attributes['image']);
+    }
+
     /**
      * Scopes
      */
 
     public function scopeHasDiscount($query)
     {
-        return $query->whereNotNull('offPrice')->whereColumn('offPrice', '<>', 'price')->where('off_date_from', '<', Carbon::now())->where('off_date_to', '>' , Carbon::now());
+        return $query->whereNotNull('offPrice')->whereColumn('offPrice', '<>', 'price')->where('off_date_from', '<', Carbon::now())->where('off_date_to', '>', Carbon::now());
     }
 
     public function scopeTopOrders($query)
     {
         return $query->select('products.id', 'products.slug', 'products.name', 'products.image')
-        ->join('sizes','products.id','=','sizes.product_id')
-        ->join('order_items','sizes.id','=','order_items.size_id')
-        ->groupBy('products.id')
-        ->orderByRaw("COUNT(order_items.id) desc");
+            ->join('sizes', 'products.id', '=', 'sizes.product_id')
+            ->join('order_items', 'sizes.id', '=', 'order_items.size_id')
+            ->groupBy('products.id')
+            ->orderByRaw("COUNT(order_items.id) desc");
     }
 
     public function scopeFilter($query)
     {
-        if(request()->has('brands')){
+        if (request()->has('brands')) {
             foreach (explode('-', request()->brands)  as $index => $brand) {
                 $brand = Brand::where('name', $brand)->firstOrFail();
-                if($index == 0)
+                if ($index == 0)
                     $query->where('brand_id', $brand->id);
                 else
                     $query->orWhere('brand_id', $brand->id);
             }
         }
 
-        if(request()->has('colors')){
+        if (request()->has('colors')) {
             foreach (explode('-', request()->colors)  as $index => $color) {
-                if($index == 0)
+                if ($index == 0)
                     $query->where('color', $color);
                 else
                     $query->orWhere('color', $color);
             }
         }
 
-        if(request()->has('sizes')){
+        if (request()->has('sizes')) {
             foreach (explode('-', request()->sizes)  as $index => $size) {
                 $ids = Size::where('size', $size)->get('product_id');
-                if($index == 0)
+                if ($index == 0)
                     $query->whereIn('id', $ids);
                 else
                     $query->orWhereIn('id', $ids);
             }
         }
 
-        if(request()->has('min')){
+        if (request()->has('min')) {
             $query->where('offPrice', '>', request()->min);
         }
 
-        if(request()->has('max')){
+        if (request()->has('max')) {
             $query->where('offPrice', '<', request()->max);
         }
 
-        if(request()->has('sort')){
+        if (request()->has('sort')) {
             $sort = request()->get('sort');
             switch ($sort) {
                 case 'bestselling':
                     $query->select('products.*')
-                    ->join('sizes','products.id','=','sizes.product_id')
-                    ->leftJoin('order_items','sizes.id','=','order_items.size_id')
-                    ->groupBy('products.id')
-                    ->orderByRaw("COUNT(order_items.id) desc");
+                        ->join('sizes', 'products.id', '=', 'sizes.product_id')
+                        ->leftJoin('order_items', 'sizes.id', '=', 'order_items.size_id')
+                        ->groupBy('products.id')
+                        ->orderByRaw("COUNT(order_items.id) desc");
                     break;
                 case 'favorite':
                     $query->select('products.*')->join('comments', 'products.id', '=', 'comments.product_id')
-                    ->groupBy('products.id')->orderByRaw('AVG(rate) desc')->toSql();
+                        ->groupBy('products.id')->orderByRaw('AVG(rate) desc')->toSql();
                     break;
                 case 'newest':
                     $query->latest();

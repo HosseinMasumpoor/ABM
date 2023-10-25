@@ -8,7 +8,9 @@ use App\Http\Controllers\UserController;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,4 +67,32 @@ Route::get('/sliders', [SliderController::class, 'index']);
 
 
 Route::get('/test', function () {
+});
+
+Route::post('/login', function (Request $request) {
+    $user = User::where('email', $request->email)->first();
+    if (!$user) {
+        throw ValidationException::withMessages([
+            'email' => 'کاربری با ایمیل وارد شده پیدا نشد'
+        ]);
+    }
+    if (Hash::check($request->password, $user->password)) {
+        auth()->login($user);
+    } else {
+        throw ValidationException::withMessages([
+            'password' => 'رمز عبور وارد شده اشتباه است'
+        ]);
+    }
+
+    return response([
+        'message' => 'ورود به حساب کاربری با موفقیت انجام شد',
+        'data' => $user
+    ]);
+});
+
+Route::post('/logout', function () {
+    auth()->logout();
+    return response([
+        'message' => 'شما با موفقیت خارج شدید'
+    ]);
 });

@@ -142,7 +142,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ($users as $user) {
             foreach (range(0, random_int(2, 10)) as $value) {
-
                 Bookmark::factory()->create([
                     'user_id' => $user->id,
                     'product_id' => $products->random()->id
