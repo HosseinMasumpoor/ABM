@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class Image extends Model
 {
@@ -21,6 +22,8 @@ class Image extends Model
 
     public function getSrcAttribute()
     {
-        return asset('storage/' . $this->attributes['src']);
+        $src = $this->attributes['src'];
+        $src = Str::startsWith($src, 'http://') || Str::startsWith($src, 'https://') ? $src : 'storage/' . $src;
+        return asset($src);
     }
 }

@@ -20,6 +20,14 @@ class SliderController extends Controller
         return $sliders;
     }
 
+    public function showAll()
+    {
+        $sliders = Slider::latest()->limit(10)->get();
+        return response()->json([
+            'data' => $sliders
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

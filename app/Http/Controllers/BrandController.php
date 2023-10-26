@@ -16,6 +16,14 @@ class BrandController extends Controller
         return Brand::paginate(10);
     }
 
+    public function showAll()
+    {
+        $brands = Brand::all();
+        return response()->json([
+            'data' => $brands
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

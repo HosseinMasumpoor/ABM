@@ -5,6 +5,7 @@ namespace App\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class Category extends Model
 {
@@ -44,6 +45,17 @@ class Category extends Model
         }
         $products = $products->flatten();
         return $products;
+    }
+
+    public function getIconAttribute()
+    {
+        if ($this->attributes['icon']) {
+
+            $src = $this->attributes['icon'];
+            $src = Str::startsWith($src, 'http://') || Str::startsWith($src, 'https://') ? $src : 'storage/' . $src;
+            return asset($src);
+        }
+        return $this->attributes['icon'];
     }
 
     public function sluggable(): array

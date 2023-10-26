@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Cviebrock\EloquentSluggable\Sluggable;
-
+use Str;
 
 class Product extends Model
 {
@@ -77,7 +77,9 @@ class Product extends Model
 
     public function getImageAttribute()
     {
-        return asset('storage/' . $this->attributes['image']);
+        $src = $this->attributes['image'];
+        $src = Str::startsWith($src, 'http://') || Str::startsWith($src, 'https://') ? $src : 'storage/' . $src;
+        return asset($src);
     }
 
     /**

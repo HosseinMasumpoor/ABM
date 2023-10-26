@@ -45,6 +45,8 @@ Route::prefix('/categories')->group(function () {
     Route::get('/{category}', [CategoryController::class, 'show']);
 });
 
+
+
 Route::prefix('/profile')->group(function () {
     Route::get('/information', [UserController::class, 'information']);
     Route::get('/orders', [UserController::class, 'showOrders']);
@@ -63,8 +65,8 @@ Route::prefix('/admin')->group(function () {
 
 Route::get('/homepage/categories', [CategoryController::class, 'getHomepageCategories']);
 
-Route::get('/sliders', [SliderController::class, 'index']);
-
+Route::get('/sliders', [SliderController::class, 'showAll']);
+Route::get('/brands', [BrandController::class, 'showAll']);
 
 Route::get('/test', function () {
 });
