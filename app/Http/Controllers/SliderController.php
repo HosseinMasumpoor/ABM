@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SliderResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Slider;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class SliderController extends Controller
     public function index()
     {
         $sliders = Slider::paginate(10);
+        $sliders = SliderResource::collection($sliders);
         return $sliders;
     }
 

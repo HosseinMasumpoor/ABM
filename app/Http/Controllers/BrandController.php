@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BrandResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Brand;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return Brand::paginate(10);
+        return BrandResource::collection(Brand::paginate(10));
     }
 
     public function showAll()

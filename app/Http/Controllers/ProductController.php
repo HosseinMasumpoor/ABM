@@ -43,6 +43,10 @@ class ProductController extends Controller
     public function getFilters(Category $category)
     {
 
+        $price = [
+            'min' => 0,
+            'max' => $category->products()->max('offPrice')
+        ];
 
         $brandIds = $category->products()->pluck('brand_id');
         $productIds = $category->products()->pluck('id')->toArray();
@@ -54,15 +58,37 @@ class ProductController extends Controller
             $pos_b = array_search($b->size, $order);
             return $pos_a - $pos_b;
         })->values();
+        $sizes = $sizes->map(function ($size) {
+            return [
+                'id' => $size->id,
+                'name' => $size->size,
+                'value' => $size->id
+            ];
+        });
 
         $brands = Brand::whereIn('id', $brandIds)->orderBy('name')->get(['id', 'name']);
+        $brands = $brands->map(function ($brand) {
+            return [
+                'id' => $brand->id,
+                'name' => $brand->name,
+                'value' => $brand->id
+            ];
+        });
 
         $colors = $category->products()->get(['id', 'color', 'colorCode'])->unique('color')->sortBy('color')->values();
+        $colors = $colors->map(function ($color) {
+            return [
+                'id' => $color->id,
+                'name' => $color->color,
+                'value' => $color->colorCode
+            ];
+        });
         return [
             'data' => [
                 'sizes' => $sizes,
                 'colors' => $colors,
-                'brands' => $brands
+                'brands' => $brands,
+                'price' => $price
             ]
 
         ];
