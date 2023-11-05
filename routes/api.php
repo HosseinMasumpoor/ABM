@@ -60,6 +60,7 @@ Route::prefix('/admin')->group(function () {
     Route::apiResource('products', ProductController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('brands', BrandController::class);
+    // Route::get('/categories/all', [CategoryController::class, 'showAll']);
 });
 
 

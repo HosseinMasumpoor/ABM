@@ -110,6 +110,7 @@ class CategoryController extends Controller
         try {
             Storage::delete($category->icon);
             $category->products()->delete();
+            $category->subCategories()->delete();
             $category->delete();
         } catch (\Throwable $th) {
             return new ErrorResponse($th, 'حذف دسته بندی با موفقیت انجام نشد');

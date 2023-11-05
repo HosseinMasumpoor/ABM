@@ -102,6 +102,8 @@ class Product extends Model
 
     public function scopeFilter($query)
     {
+        // $query->orWhereIn('category_id', $)
+        // dd($query->toSql());
         if (request()->has('brands')) {
             foreach (explode('-', request()->brands)  as $index => $brand) {
                 $brand = Brand::where('name', $brand)->firstOrFail();

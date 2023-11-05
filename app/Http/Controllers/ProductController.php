@@ -35,6 +35,8 @@ class ProductController extends Controller
 
     public function filter(Category $category)
     {
+        $products = $category->allProducts;
+        dd($products);
         $products = $category->products()->filter()->paginate(12)->withQueryString();
         $products = ProductCardResource::collection($products);
         return $products;

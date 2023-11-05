@@ -17,6 +17,10 @@ class Category extends Model
         'updated_at'
     ];
 
+    // function allProducts() {
+    //     return $this->
+    // }
+
     public function products()
     {
         return $this->hasMany(Product::class);
