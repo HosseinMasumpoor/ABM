@@ -16,7 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = AdminCategoryResource::collection(Category::paginate(10));
+        $categories = Category::where('parent_id', null)->get();
+        $categories = AdminCategoryResource::collection($categories->load('subCategories'));
         return $categories;
     }
 
@@ -25,6 +26,7 @@ class CategoryController extends Controller
         $categories = Category::where('parent_id', null)->get();
         return CategoryResource::collection($categories->load('subCategories'));
     }
+
 
 
     /**
