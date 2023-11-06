@@ -20,7 +20,6 @@ class AdminCategoryResource extends JsonResource
             'slug' => $this->slug,
             'is_active' => $this->is_active,
             'icon' => $this->icon,
-            'parent' => $this->parent,
             'subCategories' => $this->whenLoaded('subCategories', fn () => AdminCategoryResource::collection($this->subCategories->load('subCategories'))),
         ];
         // return parent::toArray($request);
