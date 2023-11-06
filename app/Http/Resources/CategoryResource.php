@@ -20,7 +20,6 @@ class CategoryResource extends JsonResource
             'slug' => $this->slug,
             'is_active' => $this->is_active,
             'icon' => $this->icon,
-            'parent_id' => $this->parent,
             'parent' => $this->whenLoaded('parent', fn () => new CategoryResource($this->parent->load('parent'))),
             'products' => $this->whenLoaded('products', fn () => ProductResource::collection($this->products)),
             'subCategories' => $this->whenLoaded('subCategories', fn () => CategoryResource::collection($this->subCategories->load('subCategories'))),
