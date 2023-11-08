@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $products = collect();
-        for ($i = 0; $i < 150; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $product = Product::factory()->create([
                 'category_id' => $subCategories->random()->id,
                 'brand_id' => $brands->random()->id

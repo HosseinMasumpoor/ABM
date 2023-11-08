@@ -81,10 +81,12 @@ class CategoryController extends Controller
             'icon' => 'image:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        if ($request->has('icon')) {
+        if ($request->get('icon') != null) {
+
             $icon = $request->file('icon');
             $iconPath = $icon->store(env('CATEGORY_IMAGE_UPLOAD_PATH'), 'public');
-            Storage::delete($category->icon);
+            if ($category->icon)
+                Storage::delete($category->icon);
         }
 
 
@@ -110,7 +112,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         try {
-            Storage::delete($category->icon);
+            if ($category->icon)
+                Storage::delete($category->icon);
             $category->products()->delete();
             $category->subCategories()->delete();
             $category->delete();

@@ -35,10 +35,19 @@ class SliderController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'link' => "required|url",
             'src' => "required|image:jpeg,png,jpg,gif,svg|max:2048",
         ]);
+        $slidersCount = Slider::all()->count();
+        if ($slidersCount >= 10) {
+            return response()->json([
+                'message' => 'تعداد اسلایدرها بیشتر از 10 است. برای افزودن اسلایدر جدید باید تعدادی را حذف نمایید'
+            ], 500);
+        }
+
+
 
         $image = $request->file('src');
         $src = $image->store(env('SLIDER_IMAGE_UPLOAD_PATH'), 'public');
