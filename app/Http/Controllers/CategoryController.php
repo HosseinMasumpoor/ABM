@@ -81,8 +81,7 @@ class CategoryController extends Controller
             'icon' => 'image:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        if ($request->get('icon') != null) {
-
+        if ($request->file('icon') != null) {
             $icon = $request->file('icon');
             $iconPath = $icon->store(env('CATEGORY_IMAGE_UPLOAD_PATH'), 'public');
             if ($category->icon)
