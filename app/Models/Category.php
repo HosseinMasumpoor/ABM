@@ -17,9 +17,10 @@ class Category extends Model
         'updated_at'
     ];
 
-    // function allProducts() {
-    //     return $this->
-    // }
+    public function subCategoriesId()
+    {
+        return $this->hasMany(Category::class, 'parent_id')->orderBy('id', 'DESC')->get('id');
+    }
 
     public function products()
     {

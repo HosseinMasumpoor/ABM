@@ -35,9 +35,8 @@ class ProductController extends Controller
 
     public function filter(Category $category)
     {
-        // $products = $category->allProducts;
-        // dd($products);
-        $products = $category->products()->filter()->paginate(12)->withQueryString();
+        $categoryIds = $this->getCategoriesId($category);
+        $products = $category->products()->filter($categoryIds)->paginate(12)->withQueryString();
         $products = ProductCardResource::collection($products);
         return $products;
     }
@@ -330,5 +329,15 @@ class ProductController extends Controller
         return [
             'data' => $products
         ];
+    }
+
+    private function getCategoriesId($category)
+    {
+        $categoryIds = collect();
+        $categoryIds->push($category->subCategoriesId());
+        foreach ($category->subCategories as $subCategory) {
+            $categoryIds->push($this->getCategoriesId($subCategory));
+        }
+        return $categoryIds->flatten();
     }
 }

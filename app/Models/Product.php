@@ -100,10 +100,10 @@ class Product extends Model
             ->orderByRaw("COUNT(order_items.id) desc");
     }
 
-    public function scopeFilter($query)
+    public function scopeFilter($query, $categoryIds)
     {
-        // $query->orWhereIn('category_id', $)
-        // dd($query->toSql());
+        $query->orWhereIn('category_id', $categoryIds);
+
         if (request()->has('brands')) {
             foreach (explode('-', request()->brands)  as $index => $brand) {
                 $brand = Brand::where('name', $brand)->firstOrFail();
@@ -170,6 +170,16 @@ class Product extends Model
                     break;
             }
         }
+    }
+
+
+    function getSubCategoriesId()
+    {
+        $categoryIds = collect();
+        foreach ($this->subCategories as $subCategory) {
+            $categoryIds->push($subCategory->id);
+        }
+        return $categoryIds;
     }
 
     public function sluggable(): array
