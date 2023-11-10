@@ -184,18 +184,17 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product = new ProductResource($product);
-        return $product;
-    }
-
-    public function showBreadcrumb(Product $product)
-    {
         $breadCrumb = $product->category->parents;
         $breadCrumb = CategoryBreadcrumbResource::collection($breadCrumb);
-        return $breadCrumb;
-        // return response([
-        //     'data' => $breadCrumb
-        // ]);
+        return response([
+            'data' => [
+
+                'product' => $product,
+                'brearcrumb' => $breadCrumb
+            ]
+        ]);
     }
+
 
     public function showComments(Product $product)
     {
