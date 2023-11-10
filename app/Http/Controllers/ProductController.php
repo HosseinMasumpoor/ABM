@@ -45,13 +45,20 @@ class ProductController extends Controller
     public function getFilters(Category $category)
     {
 
+        $categoryIds = $this->getCategoriesId($category);
+        $categoryIds->push($category->id);
+        // $categories = Category::whereIn('id', $categoryIds)->get();
+
+        $products = Product::whereIn('category_id', $categoryIds);
         $price = [
             'min' => 0,
-            'max' => $category->products()->max('offPrice')
+            'max' => $products->max('offPrice')
         ];
 
-        $brandIds = $category->products()->pluck('brand_id');
-        $productIds = $category->products()->pluck('id')->toArray();
+
+        $brandIds = $products->pluck('brand_id');
+
+        $productIds = $products->pluck('id')->toArray();
 
         $order = ['sm', 'md', 'lg', 'xl', '2xl', '3xl'];
         $sizes = Size::whereIn('product_id', $productIds)->distinct('size')->get(['id', 'size'])->unique('size')->sortBy('size');
@@ -77,7 +84,7 @@ class ProductController extends Controller
             ];
         });
 
-        $colors = $category->products()->get(['id', 'color', 'colorCode'])->unique('color')->sortBy('color')->values();
+        $colors = $products->get(['id', 'color', 'colorCode'])->unique('color')->sortBy('color')->values();
         $colors = $colors->map(function ($color) {
             return [
                 'id' => $color->id,
@@ -344,6 +351,7 @@ class ProductController extends Controller
     private function getCategoriesId($category)
     {
         $categoryIds = collect();
+        // $categoryIds->push($category->id);
         $categoryIds->push($category->subCategoriesId());
         foreach ($category->subCategories as $subCategory) {
             $categoryIds->push($this->getCategoriesId($subCategory));

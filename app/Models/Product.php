@@ -102,7 +102,9 @@ class Product extends Model
 
     public function scopeFilter($query, $categoryIds)
     {
-        $query->orWhereIn('category_id', $categoryIds);
+        if (count($categoryIds))
+            $query->orWhereIn('category_id', $categoryIds);
+
 
         if (request()->has('brands')) {
             foreach (explode('-', request()->brands)  as $index => $brand) {
