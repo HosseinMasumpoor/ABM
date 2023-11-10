@@ -63,6 +63,20 @@ class Category extends Model
         return $this->attributes['icon'];
     }
 
+    public function getParentsAttribute()
+    {
+        $parents = collect([]);
+        $parents->push($this);
+        $parent = $this->parent;
+
+        while (!is_null($parent)) {
+            $parents->push($parent);
+            $parent = $parent->parent;
+        }
+
+        return $parents->reverse()->values();
+    }
+
     public function sluggable(): array
     {
         return [

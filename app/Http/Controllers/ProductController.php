@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryBreadcrumbResource;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\CommentResourceCollection;
 use App\Http\Resources\ProductCardResource;
@@ -184,6 +185,16 @@ class ProductController extends Controller
     {
         $product = new ProductResource($product);
         return $product;
+    }
+
+    public function showBreadcrumb(Product $product)
+    {
+        $breadCrumb = $product->category->parents;
+        $breadCrumb = CategoryBreadcrumbResource::collection($breadCrumb);
+        return $breadCrumb;
+        // return response([
+        //     'data' => $breadCrumb
+        // ]);
     }
 
     public function showComments(Product $product)
