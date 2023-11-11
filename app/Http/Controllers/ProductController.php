@@ -195,9 +195,8 @@ class ProductController extends Controller
         $breadCrumb = CategoryBreadcrumbResource::collection($breadCrumb);
         return response([
             'data' => [
-
                 'product' => $product,
-                'brearcrumb' => $breadCrumb
+                'breadcrumb' => $breadCrumb
             ]
         ]);
     }

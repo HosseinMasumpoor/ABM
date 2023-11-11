@@ -111,10 +111,22 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         try {
-            if ($category->icon)
-                Storage::delete($category->icon);
-            $category->products()->delete();
-            $category->subCategories()->delete();
+            if ($category->parent) {
+                $category->parent->products()->saveMany($category->products);
+                if ($category->subCategories->count() > 0) {
+                    $category->parent->subCategories()->saveMany($category->subCategories);
+                }
+            } else {
+                $category->products()->delete();
+                if ($category->subCategories->count() > 0) {
+                    foreach ($category->subCategories as $subCategory) {
+                        $subCategory->update([
+                            'parent_id' => null
+                        ]);
+                    }
+                }
+            }
+
             $category->delete();
         } catch (\Throwable $th) {
             return new ErrorResponse($th, 'حذف دسته بندی با موفقیت انجام نشد');
