@@ -70,6 +70,7 @@ class Product extends Model
         return null;
     }
 
+
     public function getRateAttribute()
     {
         return round($this->comments->avg('rate'), 1);
@@ -135,12 +136,17 @@ class Product extends Model
             }
         }
 
+
         if (request()->has('min')) {
             $query->where('offPrice', '>', request()->min);
         }
 
         if (request()->has('max')) {
             $query->where('offPrice', '<', request()->max);
+        }
+
+        if (request()->has('discount')) {
+            $query->whereColumn('offPrice', '<>', 'price');
         }
 
         if (request()->has('sort')) {
@@ -171,6 +177,8 @@ class Product extends Model
                     $query->latest();
                     break;
             }
+        } else {
+            $query->latest();
         }
     }
 
