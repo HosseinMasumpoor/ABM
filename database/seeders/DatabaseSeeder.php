@@ -107,38 +107,11 @@ class DatabaseSeeder extends Seeder
             $subCategories->add($category);
         }
 
-        $products = collect();
-        for ($i = 0; $i < 1000; $i++) {
-            $product = Product::factory()->create([
-                'category_id' => $subCategories->random()->id,
-                'brand_id' => $brands->random()->id
-            ]);
-            $products->add($product);
-        }
+        $this->call(ProductsTableSeeder::class);
 
-        $sizes = ["sm", 'md', 'lg', 'xl', '2xl', '3xl'];
+        $sizes = Size::all();
 
-        foreach ($products as  $product) {
-            Attribute::factory(5)->create([
-                'product_id' => $product->id
-            ]);
-
-            foreach ($sizes as $size) {
-                Size::factory()->create([
-                    'size' => $size,
-                    'product_id' => $product->id
-                ]);
-            }
-
-            Image::factory(4)->create([
-                'product_id' => $product->id
-            ]);
-
-            Comment::factory()->count(random_int(2, 20))->create([
-                'product_id' => $product->id,
-                'user_id' => $users->random()->id
-            ]);
-        }
+        $products = Product::all();
 
         foreach ($users as $user) {
             foreach (range(0, random_int(2, 10)) as $value) {
