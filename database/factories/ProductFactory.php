@@ -33,7 +33,13 @@ class ProductFactory extends Factory
             'نارنجی',
             'صورتی'
         ]);
-        $image =  'products/test/' . rand(1, 100) . '.jpg';
+
+        $files = scandir(public_path("storage/products/test"));
+        $testImages = array_diff($files, [".", ".."]);
+        $randomIndex = array_rand($testImages);
+
+
+        $image =  env('PRODUCT_IMAGE_UPLOAD_PATH') . '/test/' . $testImages[$randomIndex];
         return [
             'slug' => $this->faker->unique()->slug(),
             'name' => Faker::word(),
@@ -42,8 +48,8 @@ class ProductFactory extends Factory
             'offPrice' => $toss ? round($this->faker->numberBetween(440000, 515000), -3) : null,
             'color' => $colors->random(),
             'colorCode' => $this->faker->hexColor(),
-            'off_date_from' => Carbon::now(),
-            'off_date_to' => Carbon::now()->addDays(30)
+            'off_date_from' => $toss ? Carbon::now() : null,
+            'off_date_to' => $toss ? Carbon::now()->addDays(14) : null
         ];
     }
 }

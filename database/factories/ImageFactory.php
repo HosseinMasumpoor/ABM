@@ -17,7 +17,12 @@ class ImageFactory extends Factory
 
     public function definition(): array
     {
-        $image =  'products/test/' . rand(1, 100) . '.jpg';
+
+        $files = scandir(public_path("storage/products/test"));
+        $testImages = array_diff($files, [".", ".."]);
+        $randomIndex = array_rand($testImages);
+
+        $image =  env('PRODUCT_IMAGE_UPLOAD_PATH') . '/test/' . $testImages[$randomIndex];
         return [
             'src' => $image
         ];
