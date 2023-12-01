@@ -174,11 +174,13 @@ class Product extends Model
                     $query->orderBy('offPrice', 'desc');
                     break;
                 default:
-                    $query->latest();
+                    // $query->latest();
+                    $query->orderBy('id', 'desc');
                     break;
             }
         } else {
-            $query->latest();
+            // $query->latest();
+            $query->orderBy('id', 'desc');
         }
     }
 

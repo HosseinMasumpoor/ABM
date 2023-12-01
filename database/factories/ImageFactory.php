@@ -14,10 +14,12 @@ class ImageFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
+        $image =  'products/test/' . rand(1, 27) . '.jpg';
         return [
-            'src' => $this->faker->imageUrl()
+            'src' => $image
         ];
     }
 }

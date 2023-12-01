@@ -22,7 +22,7 @@ class CategoryResource extends JsonResource
             'icon' => $this->icon,
             'parent' => $this->whenLoaded('parent', fn () => new CategoryResource($this->parent->load('parent'))),
             'products' => $this->whenLoaded('products', fn () => ProductResource::collection($this->products)),
-            'subCategories' => $this->whenLoaded('subCategories', fn () => CategoryResource::collection($this->subCategories->load('subCategories'))),
+            'subCategories' => $this->whenLoaded('subCategories', fn () => CategoryResource::collection($this->subCategories->load('subCategories')))
         ];
         // return parent::toArray($request);
     }

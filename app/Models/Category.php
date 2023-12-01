@@ -77,6 +77,12 @@ class Category extends Model
         return $parents->reverse()->values();
     }
 
+
+    function getReversedCategoriesAttribute()
+    {
+    }
+
+
     public function sluggable(): array
     {
         return [

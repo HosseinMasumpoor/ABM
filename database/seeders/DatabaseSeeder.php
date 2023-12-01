@@ -198,7 +198,7 @@ class DatabaseSeeder extends Seeder
         $product = Product::factory()->create([
             'slug' => 'مانتوی-زنانه-هرمس',
             'name' => 'مانتوی زنانه تابستانه هرمس',
-            'image' => 'https://via.placeholder.com/640x480.png/0044ff?text=minima',
+            'image' => 'products/test/20.jpg',
             'price' => 490000,
             'offPrice' => 450000,
             'color' => 'مشکی',

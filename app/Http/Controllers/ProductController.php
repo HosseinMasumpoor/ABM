@@ -131,22 +131,14 @@ class ProductController extends Controller
 
         $images = collect();
         $primaryImage = $request->file('image')->store(env('PRODUCT_IMAGE_UPLOAD_PATH'), 'public');
-        $images->add(
-            new Image([
-                'src' => $primaryImage
-            ])
-        );
+        $images->add($primaryImage);
         $requestImages = $request->file('images');
 
         foreach ($requestImages as $image) {
             $image_uploaded_path = $image->store(env('PRODUCT_IMAGE_UPLOAD_PATH'), 'public');
 
-            $newImage = new Image([
-                'src' => $image_uploaded_path
-            ]);
-            $images->add($newImage);
+            $images->add($image_uploaded_path);
         }
-
         try {
             DB::beginTransaction();
             $product = Product::create([
@@ -163,7 +155,14 @@ class ProductController extends Controller
                 'colorCode' => $request->colorCode,
             ]);
 
-            $imagesResult = $product->images()->createMany($images->toArray());
+            $imagesResult = collect();
+            foreach ($images as $image) {
+                $imageRecord = Image::create([
+                    'src' => $image,
+                    'product_id' => $product->id
+                ]);
+                $imagesResult->push($imageRecord);
+            }
             if ($request->get('attributes'))
                 $attributes = $product->attributes()->createMany($request->get("attributes"));
             $sizes = $product->sizes()->createMany($request->sizes);
@@ -238,23 +237,19 @@ class ProductController extends Controller
         if ($request->has('image')) {
 
             $primaryImage = $request->file('image')->store(env('PRODUCT_IMAGE_UPLOAD_PATH'), 'public');
-            $images->add(
-                new Image([
-                    'src' => $primaryImage
-                ])
-            );
+            $images->add($primaryImage);
         } else {
             $primaryImage = $product->image;
         }
         $requestImages = $request->file('images');
 
-        foreach ($requestImages as $image) {
-            $image_uploaded_path = $image->store(env('PRODUCT_IMAGE_UPLOAD_PATH'), 'public');
+        if ($requestImages) {
 
-            $newImage = new Image([
-                'src' => $image_uploaded_path
-            ]);
-            $images->add($newImage);
+            foreach ($requestImages as $image) {
+                $image_uploaded_path = $image->store(env('PRODUCT_IMAGE_UPLOAD_PATH'), 'public');
+
+                $images->add($image_uploaded_path);
+            }
         }
 
         try {
@@ -273,21 +268,34 @@ class ProductController extends Controller
                 'colorCode' => $request->colorCode,
             ]);
 
-            $deletingImages = $product->images()->whereIn('id', $request->deletingImages)->get();
-            foreach ($deletingImages as $deletingImage) {
-                Storage::delete($deletingImage->src);
+
+            if ($request->has('deletingImages')) {
+                $deletingImages = $product->images()->whereIn('id', $request->deletingImages)->get();
+                foreach ($deletingImages as $deletingImage) {
+                    if (!Str::contains($deletingImage->src, 'storage/products/test/'))
+                        Storage::delete($deletingImage->getRawOriginal('src'));
+                }
+                $product->images()->whereIn('id', $request->deletingImages)->delete();
             }
 
-
-            $product->images()->whereIn('id', $request->deletingImages)->delete();
             if ($images->isNotEmpty()) {
-                $product->images()->createMany($images->toArray());
+                foreach ($images as $image) {
+                    Image::create([
+                        'src' => $image,
+                        'product_id' => $product->id
+                    ]);
+                }
             }
             $product->attributes()->delete();
             if ($request->has('attributes')) {
                 $product->attributes()->createMany($request->get('attributes'));
             }
-            $product->sizes()->whereIn('id', $request->deletingSizes)->delete();
+
+            if ($request->has('deletingSizes')) {
+
+                $product->sizes()->whereIn('id', $request->deletingSizes)->delete();
+            }
+
             if ($request->has('sizes')) {
                 $product->sizes()->createMany($request->sizes);
             }
@@ -311,7 +319,8 @@ class ProductController extends Controller
     {
         try {
             foreach ($product->images as $image) {
-                Storage::delete($image->src);
+                if (!Str::contains($image->src, 'storage/products/test/'))
+                    Storage::delete($image->getRawOriginal('src'));
             }
             $product->images()->delete();
             $product->attributes()->delete();

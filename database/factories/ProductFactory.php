@@ -33,14 +33,15 @@ class ProductFactory extends Factory
             'نارنجی',
             'صورتی'
         ]);
+        $image =  'products/test/' . rand(1, 27) . '.jpg';
         return [
-            'slug'=> $this->faker->unique()->slug(),
-            'name'=> Faker::word(),
-            'image'=> $this->faker->imageUrl,
-            'price'=> round($this->faker->numberBetween(520000, 690000), -3),
-            'offPrice'=> $toss ? round($this->faker->numberBetween(440000, 515000), -3) : null,
-            'color'=> $colors->random(),
-            'colorCode'=> $this->faker->hexColor(),
+            'slug' => $this->faker->unique()->slug(),
+            'name' => Faker::word(),
+            'image' => $image,
+            'price' => round($this->faker->numberBetween(520000, 690000), -3),
+            'offPrice' => $toss ? round($this->faker->numberBetween(440000, 515000), -3) : null,
+            'color' => $colors->random(),
+            'colorCode' => $this->faker->hexColor(),
             'off_date_from' => Carbon::now(),
             'off_date_to' => Carbon::now()->addDays(30)
         ];
