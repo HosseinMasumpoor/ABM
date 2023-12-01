@@ -19,29 +19,29 @@ class UserController extends Controller
         return $user;
     }
 
-    public function showOrders()
+    public function showOrders(Request $request)
     {
         $user = auth()->user() ?? User::find(3);
-        $orders = OrderResource::collection($user->orders()->paginate(10));
+        $orders = OrderResource::collection($user->orders()->paginate($request->items_perpage ?? 10));
         return $orders;
     }
 
-    public function showBookmarks()
+    public function showBookmarks(Request $request)
     {
         $user = auth()->user() ?? User::find(3);
-        return BookmarkResource::collection($user->bookmarks()->paginate(10));
+        return BookmarkResource::collection($user->bookmarks()->paginate($request->items_perpage ?? 10));
     }
 
-    public function showAddresses()
+    public function showAddresses(Request $request)
     {
         $user = auth()->user() ?? User::find(3);
-        $addresses = AddressResource::collection($user->addresses()->paginate(10));
+        $addresses = AddressResource::collection($user->addresses()->paginate($request->items_perpage ?? 10));
         return $addresses;
     }
 
-    public function showComments()
+    public function showComments(Request $request)
     {
         $user = auth()->user() ?? User::find(3);
-        return CommentResource::collection($user->comments()->paginate(10));
+        return CommentResource::collection($user->comments()->paginate($request->items_perpage ?? 10));
     }
 }

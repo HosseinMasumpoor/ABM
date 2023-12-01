@@ -27,17 +27,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::paginate(10);
+
+        $products = Product::paginate($request->items_perpage ?? 10);
         $products = ProductCardResource::collection($products);
         return $products;
     }
 
-    public function filter(Category $category)
+    public function filter(Request $request, Category $category)
     {
         $categoryIds = $this->getCategoriesId($category);
-        $products = $category->products()->filter($categoryIds)->paginate(12)->withQueryString();
+        $products = $category->products()->filter($categoryIds)->paginate($request->items_perpage ?? 12)->withQueryString();
         $products = ProductCardResource::collection($products);
         return $products;
     }
@@ -201,10 +202,10 @@ class ProductController extends Controller
     }
 
 
-    public function showComments(Product $product)
+    public function showComments(Request $request, Product $product)
     {
-        // $comments = new CommentResourceCollection($product->comments()->paginate(8)->load('user'));
-        $comments = CommentResource::collection($product->comments()->paginate(8));
+
+        $comments = CommentResource::collection($product->comments()->paginate($request->items_perpage ?? 8));
         return $comments;
     }
 

@@ -12,9 +12,9 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return BrandResource::collection(Brand::paginate(10));
+        return BrandResource::collection(Brand::paginate($request->items_perpage ?? 10));
     }
 
     public function showAll()

@@ -15,9 +15,9 @@ class SliderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sliders = Slider::paginate(10);
+        $sliders = Slider::paginate($request->items_perpage ?? 10);
         $sliders = SliderResource::collection($sliders);
         return $sliders;
     }
