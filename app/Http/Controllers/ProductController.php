@@ -38,7 +38,7 @@ class ProductController extends Controller
     public function filter(Request $request, Category $category)
     {
         $categoryIds = $this->getCategoriesId($category);
-        $products = $category->products()->filter($categoryIds)->paginate($request->items_perpage ?? 12)->withQueryString();
+        $products = $category->products()->filter($categoryIds)->paginate($request->items_perpage ?? 10)->withQueryString();
         $products = ProductCardResource::collection($products);
         return $products;
     }

@@ -17,7 +17,7 @@ class ImageFactory extends Factory
 
     public function definition(): array
     {
-        $image =  'products/test/' . rand(1, 27) . '.jpg';
+        $image =  'products/test/' . rand(1, 100) . '.jpg';
         return [
             'src' => $image
         ];

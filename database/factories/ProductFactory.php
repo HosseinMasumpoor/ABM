@@ -33,7 +33,7 @@ class ProductFactory extends Factory
             'نارنجی',
             'صورتی'
         ]);
-        $image =  'products/test/' . rand(1, 27) . '.jpg';
+        $image =  'products/test/' . rand(1, 100) . '.jpg';
         return [
             'slug' => $this->faker->unique()->slug(),
             'name' => Faker::word(),
