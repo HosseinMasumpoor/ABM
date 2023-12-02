@@ -30,6 +30,7 @@ class ProductResource extends JsonResource
             "offPercent" => $this->offPercent,
             'off_date_from' => $this->off_date_from,
             'off_date_to' => $this->off_date_to,
+            "is_available" => $this->isAvailable,
             "color" => $this->color,
             "colorCode" => $this->colorCode,
             // 'comments' => $this->comments()->where('approved', true)->paginate(2),

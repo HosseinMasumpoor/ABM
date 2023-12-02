@@ -25,6 +25,7 @@ class ProductCardResource extends JsonResource
             "category" => $this->category,
             "off_date_from" => $this->off_date_from,
             "off_date_to" => $this->off_date_to,
+            "is_available" => $this->isAvailable,
             "created_at" => $this->created_at
         ];
     }

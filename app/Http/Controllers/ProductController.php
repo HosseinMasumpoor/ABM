@@ -30,7 +30,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-
         $products = Product::paginate($request->items_perpage ?? 10);
         $products = ProductCardResource::collection($products);
         return $products;

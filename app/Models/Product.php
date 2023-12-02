@@ -78,6 +78,13 @@ class Product extends Model
         return null;
     }
 
+    public function getIsAvailableAttribute()
+    {
+        if ($this->sizes->sum('stock') <= 0)
+            return false;
+        return true;
+    }
+
 
     public function getRateAttribute()
     {
