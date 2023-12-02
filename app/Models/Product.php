@@ -62,6 +62,14 @@ class Product extends Model
         }
     }
 
+    public function getOffPriceAttribute()
+    {
+        if ($this->off_date_from && $this->off_date_to && $this->off_date_from < Carbon::now() && $this->off_date_to > Carbon::now()) {
+            return $this->attributes['offPrice'];
+        }
+        return $this->price;
+    }
+
     public function getOffPercentAttribute()
     {
         if ($this->offPrice) {

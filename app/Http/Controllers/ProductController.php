@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Size;
+use App\Rules\SizeUniqueRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -230,7 +231,7 @@ class ProductController extends Controller
             'image' => 'image:jpeg,png,jpg,gif,svg|max:2048',
             'attributes' => 'array',
             'attributes.*' => 'required',
-            'sizes' => 'array',
+            'sizes' => ['array', new SizeUniqueRule($product)],
             // 'sizes.*' => 'required'
         ]);
 

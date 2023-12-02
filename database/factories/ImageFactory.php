@@ -22,7 +22,7 @@ class ImageFactory extends Factory
         $testImages = array_diff($files, [".", ".."]);
         $randomIndex = array_rand($testImages);
 
-        $image =  env('PRODUCT_IMAGE_UPLOAD_PATH') . '/test/' . $testImages[$randomIndex];
+        $image =  env('PRODUCT_IMAGE_UPLOAD_PATH', 'products') . '/test/' . $testImages[$randomIndex];
         return [
             'src' => $image
         ];

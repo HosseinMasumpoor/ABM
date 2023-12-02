@@ -39,7 +39,7 @@ class ProductFactory extends Factory
         $randomIndex = array_rand($testImages);
 
 
-        $image =  env('PRODUCT_IMAGE_UPLOAD_PATH') . '/test/' . $testImages[$randomIndex];
+        $image =  env('PRODUCT_IMAGE_UPLOAD_PATH', 'products') . '/test/' . $testImages[$randomIndex];
         return [
             'slug' => $this->faker->unique()->slug(),
             'name' => Faker::word(),
