@@ -118,8 +118,11 @@ class Product extends Model
 
     public function scopeFilter($query, $categoryIds)
     {
+        $query = Product::query();
+
         if (count($categoryIds))
             $query->orWhereIn('category_id', $categoryIds);
+
 
 
         if (request()->has('brands')) {
@@ -179,7 +182,7 @@ class Product extends Model
                         ->groupBy('products.id')->orderByRaw('AVG(rate) desc')->toSql();
                     break;
                 case 'newest':
-                    $query->latest();
+                    $query->orderBy('id', 'desc');
                     break;
                 case 'min':
                     // $query->orderByRaw('COALESCE(offPrice, price) ASC');
@@ -189,14 +192,13 @@ class Product extends Model
                     $query->orderBy('offPrice', 'desc');
                     break;
                 default:
-                    // $query->latest();
                     $query->orderBy('id', 'desc');
                     break;
             }
         } else {
-            // $query->latest();
             $query->orderBy('id', 'desc');
         }
+        return $query;
     }
 
 

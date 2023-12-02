@@ -38,6 +38,7 @@ class ProductController extends Controller
     public function filter(Request $request, Category $category)
     {
         $categoryIds = $this->getCategoriesId($category);
+        $categoryIds->push($category->id);
         $products = $category->products()->filter($categoryIds)->paginate($request->items_perpage ?? 10)->withQueryString();
         $products = ProductCardResource::collection($products);
         return $products;
@@ -48,7 +49,6 @@ class ProductController extends Controller
 
         $categoryIds = $this->getCategoriesId($category);
         $categoryIds->push($category->id);
-        // $categories = Category::whereIn('id', $categoryIds)->get();
 
         $products = Product::whereIn('category_id', $categoryIds);
         $price = [
@@ -360,7 +360,6 @@ class ProductController extends Controller
     private function getCategoriesId($category)
     {
         $categoryIds = collect();
-        // $categoryIds->push($category->id);
         $categoryIds->push($category->subCategoriesId());
         foreach ($category->subCategories as $subCategory) {
             $categoryIds->push($this->getCategoriesId($subCategory));
