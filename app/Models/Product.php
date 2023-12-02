@@ -154,7 +154,7 @@ class Product extends Model
         }
 
         if (request()->has('discount')) {
-            $query->whereColumn('offPrice', '<>', 'price');
+            $query->whereColumn('offPrice', '<>', 'price')->where('off_date_from', '<', Carbon::now())->where('off_date_to', '>', Carbon::now());
         }
 
         if (request()->has('sort')) {
