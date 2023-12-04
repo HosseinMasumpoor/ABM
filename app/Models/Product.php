@@ -70,6 +70,22 @@ class Product extends Model
         return $this->price;
     }
 
+    public function getOffDateFromAttribute()
+    {
+        if ($this->attributes['off_date_from'] && $this->attributes['off_date_to'] && $this->attributes['off_date_from'] < Carbon::now() && $this->attributes['off_date_to'] > Carbon::now()) {
+            return $this->attributes['off_date_from'];
+        }
+        return null;
+    }
+
+    public function getOffDateToAttribute()
+    {
+        if ($this->attributes['off_date_from'] && $this->attributes['off_date_to'] && $this->attributes['off_date_from'] < Carbon::now() && $this->attributes['off_date_to'] > Carbon::now()) {
+            return $this->attributes['off_date_to'];
+        }
+        return null;
+    }
+
     public function getOffPercentAttribute()
     {
         if ($this->offPrice) {
