@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
@@ -62,6 +63,8 @@ Route::prefix('/admin')->group(function () {
     Route::apiResource('brands', BrandController::class);
     // Route::get('/categories/all', [CategoryController::class, 'showAll']);
 });
+
+Route::post('check-cart', [CartController::class, 'checkCart'])->name('check-cart');
 
 
 Route::get('/homepage/categories', [CategoryController::class, 'getHomepageCategories']);
