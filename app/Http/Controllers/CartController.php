@@ -23,13 +23,20 @@ class CartController extends Controller
             $error = [];
             // چک کردن وجود سایز
             if ($size) {
+                $cartItems[$index]["price"] = $size->product->price;
+                $cartItems[$index]["offPrice"] = $size->product->offPrice;
+                $cartItems[$index]["offPercent"] = $size->product->offPercent;
+                $cartItems[$index]["off_date_from"] = $size->product->off_date_from;
+                $cartItems[$index]["off_date_to"] = $size->product->off_date_to;
+                $cartItems[$index]["color"] = $size->product->color;
+                $cartItems[$index]["colorCode"] = $size->product->colorCode;
+                $cartItems[$index]["image"] = $size->product->image;
+                $cartItems[$index]["slug"] = $size->product->slug;
+
+
                 // چک کردن تغییر نکردن قیمت
                 if ($size->product->offPrice != $item["offPrice"]) {
-                    $cartItems[$index]["price"] = $size->product->price;
-                    $cartItems[$index]["offPrice"] = $size->product->offPrice;
-                    $cartItems[$index]["offPercent"] = $size->product->offPercent;
-                    $cartItems[$index]["off_date_from"] = $size->product->off_date_from;
-                    $cartItems[$index]["off_date_to"] = $size->product->off_date_to;
+
 
                     if ($size->product->offPrice > $item["offPrice"]) {
                         if ($item["price"] != $item["offPrice"] && $size->product->price ==  $size->product->offPrice) {
@@ -82,7 +89,7 @@ class CartController extends Controller
                 }
             } else {
                 $message = [
-                    'text' => "سایز انتخاب شده از محصول از فروشگاه حذف شده است. دوباره به سبد خرید اضافه کنید",
+                    'text' => "متاسفانه محصول با این سایز انتخاب شده دیگر موجود نیست",
                     'type' => "deleted"
                 ];
                 $cartItems[$index]["sizes"] = null;
