@@ -15,8 +15,8 @@ class Banner extends Model
         'order',
     ];
 
-    // public function getSrcAttribute()
-    // {
-    //     return asset($this->src);
-    // }
+    public function getSrcAttribute()
+    {
+        return asset($this->attributes['src']);
+    }
 }
