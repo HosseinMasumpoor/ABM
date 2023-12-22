@@ -17,7 +17,7 @@ class BannerController extends Controller
 
     public function showBanners(Request $request)
     {
-        $banners = Banner::where('type', $request->type)->get();
+        $banners = $request->has('type') ? Banner::where('type', $request->type)->get() : Banner::all();
         $banners = BannerResource::collection($banners);
         return $banners;
     }
