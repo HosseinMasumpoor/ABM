@@ -32,6 +32,11 @@ class CartController extends Controller
                 $cartItems[$index]["colorCode"] = $size->product->colorCode;
                 $cartItems[$index]["image"] = $size->product->image;
                 $cartItems[$index]["slug"] = $size->product->slug;
+                $cartItems[$index]["sizes"] = [
+                    'id' => $size->id,
+                    'size' => $size->size,
+                    'stock' => $size->stock
+                ];
 
 
                 // چک کردن تغییر نکردن قیمت
