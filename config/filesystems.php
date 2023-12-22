@@ -73,4 +73,6 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+    'banner_image_upload_path' => env('BANNER_IMAGE_UPLOAD_PATH', 'banners'),
+
 ];

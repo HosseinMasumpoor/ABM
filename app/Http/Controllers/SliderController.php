@@ -81,7 +81,6 @@ class SliderController extends Controller
      */
     public function update(Request $request, Slider $slider)
     {
-        // dd(Storage::exists($slider->src), $slider->src);
         $request->validate([
             'link' => "url",
             'src' => "image:jpeg,png,jpg,gif,svg|max:2048",

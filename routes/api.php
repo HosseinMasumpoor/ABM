@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -61,7 +62,7 @@ Route::prefix('/admin')->group(function () {
     Route::apiResource('products', ProductController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('brands', BrandController::class);
-    // Route::get('/categories/all', [CategoryController::class, 'showAll']);
+    Route::apiResource('banners', BannerController::class);
 });
 
 Route::post('check-cart', [CartController::class, 'checkCart'])->name('check-cart');
@@ -71,6 +72,7 @@ Route::get('/homepage/categories', [CategoryController::class, 'getHomepageCateg
 
 Route::get('/sliders', [SliderController::class, 'showAll']);
 Route::get('/brands', [BrandController::class, 'showAll']);
+Route::get('/banners', [BannerController::class, 'showBanners']);
 
 Route::get('/test', function () {
 });
