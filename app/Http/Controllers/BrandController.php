@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Brand\StoreBrandRequest;
+use App\Http\Requests\Brand\UpdateBrandRequest;
 use App\Http\Resources\BrandResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Brand;
@@ -28,11 +30,8 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBrandRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
         try {
             $brand = Brand::create([
                 'name' => $request->name,
@@ -59,12 +58,8 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Brand $brand)
+    public function update(UpdateBrandRequest $request, Brand $brand)
     {
-        $request->validate([
-            'name' => 'required'
-        ]);
-
         try {
             $brand->update([
                 'name' => $request->name,

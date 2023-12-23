@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Banner;
+namespace App\Http\Requests\Slider;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BannerUpdateRequest extends FormRequest
+class StoreSliderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class BannerUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|string',
-            'src' => 'image:jpeg,png,jpg,gif,svg|max:2048',
-            'link' => 'required|url',
-            'order' => 'nullable|numeric'
+            'link' => "required|url",
+            'src' => "required|image:jpeg,png,jpg,gif,svg|max:2048",
         ];
     }
 }

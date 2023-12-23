@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Slider\StoreSliderRequest;
+use App\Http\Requests\Slider\UpdateSliderRequest;
 use App\Http\Resources\SliderResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Slider;
@@ -33,21 +35,15 @@ class SliderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreSliderRequest $request)
     {
 
-        $request->validate([
-            'link' => "required|url",
-            'src' => "required|image:jpeg,png,jpg,gif,svg|max:2048",
-        ]);
         $slidersCount = Slider::all()->count();
         if ($slidersCount >= 10) {
             return response()->json([
                 'message' => 'تعداد اسلایدرها بیشتر از 10 است. برای افزودن اسلایدر جدید باید تعدادی را حذف نمایید'
             ], 500);
         }
-
-
 
         $image = $request->file('src');
         $src = $image->store(env('SLIDER_IMAGE_UPLOAD_PATH'), 'public');
@@ -79,12 +75,8 @@ class SliderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Slider $slider)
+    public function update(UpdateSliderRequest $request, Slider $slider)
     {
-        $request->validate([
-            'link' => "url",
-            'src' => "image:jpeg,png,jpg,gif,svg|max:2048",
-        ]);
 
         if ($request->has('src')) {
             $image = $request->file('src');
@@ -113,7 +105,6 @@ class SliderController extends Controller
     public function destroy(Slider $slider)
     {
         try {
-            Storage::delete($slider->src);
             $slider->delete();
         } catch (\Throwable $th) {
             $message = 'حذف اسلایدر با موفقیت انجام نشد';

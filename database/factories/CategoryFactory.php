@@ -17,6 +17,11 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
+        $files = scandir(public_path("storage/categories/test"));
+        $testImages = array_diff($files, [".", ".."]);
+        $randomIndex = array_rand($testImages);
+        $image =  env('CATEGORY_IMAGE_UPLOAD_PATH', 'categories') . '/test/' . $testImages[$randomIndex];
+
         $categories = collect([
             'پیراهن',
             'شلوار',
@@ -42,8 +47,9 @@ class CategoryFactory extends Factory
             'انگشتر'
         ]);
         return [
-            'slug'=> $this->faker->unique()->slug(),
+            'slug' => $this->faker->unique()->slug(),
             'name' => $categories->random(),
+            'icon' => $image
         ];
     }
 }

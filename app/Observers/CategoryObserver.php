@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use Str;
 
 class CategoryObserver
 {
@@ -16,11 +17,15 @@ class CategoryObserver
     }
 
     /**
-     * Handle the Category "updated" event.
+     * Handle the Category "updating" event.
      */
-    public function updated(Category $category): void
+    public function updating(Category $category): void
     {
-        //
+        if (request()->has('icon')) {
+            $src = $category->getRawOriginal('icon');
+            if ($src && !Str::startsWith($src, env('CATEGORY_IMAGE_UPLOAD_PATH') . '/test/'))
+                Storage::delete($src);
+        }
     }
 
     /**
@@ -32,11 +37,8 @@ class CategoryObserver
 
     function deleting(Category $category): void
     {
-        // Storage::delete('http://localhost:8000/storage/categories/ZyXZcNgbOJi0W4mmmHOSPwNzUKtveac7dejAZ4fx.png');
-        // dd($category->icon);
-        // if ($category->icon) {
-        //     Storage::delete($category->icon);
-        // }
+        $src = $category->getRawOriginal('icon');
+        Storage::delete($src);
     }
 
     /**

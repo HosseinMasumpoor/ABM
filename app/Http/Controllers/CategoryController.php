@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\AdminCategoryResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Responses\ErrorResponse;
@@ -32,14 +34,8 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'slug' => 'unique:categories',
-            'parent_id' => 'nullable|exists:categories,id',
-            'icon' => 'image:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
 
         if ($request->has('icon')) {
             $icon = $request->file('icon');
@@ -72,14 +68,8 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'slug' => 'unique:categories,slug,' . $category->id,
-            'parent_id' => 'nullable|exists:categories,id',
-            'icon' => 'image:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
 
         if ($request->file('icon') != null) {
             $icon = $request->file('icon');

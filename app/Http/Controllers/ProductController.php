@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\CategoryBreadcrumbResource;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\CommentResourceCollection;
@@ -108,28 +110,8 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'slug' => 'unique:products,slug',
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'required|exists:brands,id',
-            'price' => 'required|numeric',
-            'offPrice' => 'nullable|numeric',
-            'off_date_from' => 'required_with:offPrice|date',
-            'off_date_to' => 'required_with:offPrice|date',
-            'color' => 'required',
-            'colorCode' => 'required',
-            'images' => 'array|required',
-            'images.*' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
-            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
-            'attributes' => 'array',
-            'attributes.*' => 'required',
-            'sizes' => 'array|required',
-            'sizes.*' => 'required'
-        ]);
-
         $images = collect();
         $primaryImage = $request->file('image')->store(env('PRODUCT_IMAGE_UPLOAD_PATH'), 'public');
         $images->add($primaryImage);
@@ -212,28 +194,8 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required',
-            'slug' => 'unique:products,slug,' . $product->id,
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'required|exists:brands,id',
-            'price' => 'required|numeric',
-            'offPrice' => 'nullable|numeric',
-            'off_date_from' => 'required_with:offPrice|date',
-            'off_date_to' => 'required_with:offPrice|date',
-            'color' => 'required',
-            'colorCode' => 'required',
-            'images' => 'array',
-            'images.*' => 'image:jpeg,png,jpg,gif,svg|max:2048',
-            'image' => 'image:jpeg,png,jpg,gif,svg|max:2048',
-            'attributes' => 'array',
-            'attributes.*' => 'required',
-            'sizes' => ['array', new SizeUniqueRule($product)],
-            // 'sizes.*' => 'required'
-        ]);
-
         $images = collect();
         if ($request->has('image')) {
 
@@ -273,7 +235,7 @@ class ProductController extends Controller
             if ($request->has('deletingImages')) {
                 $deletingImages = $product->images()->whereIn('id', $request->deletingImages)->get();
                 foreach ($deletingImages as $deletingImage) {
-                    if (!Str::contains($deletingImage->src, 'storage/products/test/'))
+                    if (!Str::startsWith($deletingImage->src, env('PRODUCT_IMAGE_UPLOAD_PATH') . '/test/'))
                         Storage::delete($deletingImage->getRawOriginal('src'));
                 }
                 $product->images()->whereIn('id', $request->deletingImages)->delete();
@@ -319,11 +281,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         try {
-            foreach ($product->images as $image) {
-                if (!Str::contains($image->src, 'storage/products/test/'))
-                    Storage::delete($image->getRawOriginal('src'));
-            }
-            $product->images()->delete();
+            $product->images->each->delete();
             $product->attributes()->delete();
             $product->sizes()->delete();
             $product->delete();

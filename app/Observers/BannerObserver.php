@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Banner;
 use Storage;
+use Str;
 
 class BannerObserver
 {
@@ -24,7 +25,8 @@ class BannerObserver
     public function updating(Banner $banner): void
     {
         $src = $banner->getRawOriginal('src');
-        Storage::delete($src);
+        if (!Str::startsWith($src, env('BANNER_IMAGE_UPLOAD_PATH') . '/test/'))
+            Storage::delete($src);
     }
 
     /**
@@ -34,7 +36,8 @@ class BannerObserver
     {
         //
         $src = $banner->getRawOriginal('src');
-        Storage::delete($src);
+        if (!Str::startsWith($src, env('BANNER_IMAGE_UPLOAD_PATH') . '/test/'))
+            Storage::delete($src);
     }
 
     /**

@@ -37,7 +37,7 @@ class BannerController extends Controller
      */
     public function store(BannerStoreRequest $request)
     {
-        $image = $request->file('image');
+        $image = $request->file('src');
         $folder = config('filesystems.banner_image_upload_path');
 
         $src = $image->store($folder, 'public');
@@ -73,15 +73,8 @@ class BannerController extends Controller
      */
     public function update(BannerUpdateRequest $request, Banner $banner)
     {
-        // if ($request->has('src')) {
-        //     $image = $request->file('src');
-        //     $src = $image->store(env('SLIDER_IMAGE_UPLOAD_PATH'), 'public');
-        //     Storage::delete($slider->src);
-        // }
-
-        // dd($request->all());
-        if ($request->has('image')) {
-            $image = $request->file('image');
+        if ($request->has('src')) {
+            $image = $request->file('src');
             $folder = config('filesystems.banner_image_upload_path');
             $src = $image->store($folder, 'public');
         }

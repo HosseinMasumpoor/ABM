@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Slider>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Banner>
  */
-class SliderFactory extends Factory
+class BannerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,14 +16,16 @@ class SliderFactory extends Factory
      */
     public function definition(): array
     {
-        $files = scandir(public_path("storage/sliders/test"));
+        $files = scandir(public_path("storage/banners/test"));
         $testImages = array_diff($files, [".", ".."]);
         $randomIndex = array_rand($testImages);
-        $image =  env('SLIDER_IMAGE_UPLOAD_PATH', 'sliders') . '/test/' . $testImages[$randomIndex];
+        $image =  env('BANNER_IMAGE_UPLOAD_PATH', 'banners') . '/test/' . $testImages[$randomIndex];
 
         return [
             'src' => $image,
-            'link' => $this->faker->url()
+            'link' => $this->faker->url(),
+            'type' => "homepage",
+            'order' => 0
         ];
     }
 }

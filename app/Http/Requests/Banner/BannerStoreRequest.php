@@ -23,7 +23,7 @@ class BannerStoreRequest extends FormRequest
     {
         return [
             'type' => 'required|string',
-            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
+            'src' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
             'link' => 'required|url',
             'order' => 'nullable|numeric'
         ];

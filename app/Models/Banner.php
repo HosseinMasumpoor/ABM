@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class Banner extends Model
 {
@@ -17,6 +18,11 @@ class Banner extends Model
 
     public function getSrcAttribute()
     {
-        return asset($this->attributes['src']);
+        if ($this->attributes['src']) {
+            $src = $this->attributes['src'];
+            $src = Str::startsWith($src, 'http://') || Str::startsWith($src, 'https://') ? $src : 'storage/' . $src;
+            return asset($src);
+        }
+        return $this->attributes['src'];
     }
 }
