@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -111,5 +115,11 @@ return [
     */
 
     'password_timeout' => 10800,
+
+    /**
+     * OTP Code Expiration Time by seconds
+     */
+
+    'otp_expiration_time' => env('OTP_EXPIRATION_TIME', 120),
 
 ];

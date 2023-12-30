@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
@@ -74,33 +75,41 @@ Route::get('/sliders', [SliderController::class, 'showAll']);
 Route::get('/brands', [BrandController::class, 'showAll']);
 Route::get('/banners', [BannerController::class, 'showBanners']);
 
-Route::get('/test', function () {
+Route::post('auth/login', [AuthController::class, 'login'])->name('login');
+
+Route::prefix('/auth')->name('auth.')->group(function () {
+    Route::post('/check-email', [AuthController::class, 'checkEmail'])->name('email.check');
+    Route::post('/send-otp', [AuthController::class, 'sendOTP'])->name('otp.send');
 });
 
-Route::post('/login', function (Request $request) {
-    $user = User::where('email', $request->email)->first();
-    if (!$user) {
-        throw ValidationException::withMessages([
-            'email' => 'کاربری با ایمیل وارد شده پیدا نشد'
-        ]);
-    }
-    if (Hash::check($request->password, $user->password)) {
-        auth()->login($user);
-    } else {
-        throw ValidationException::withMessages([
-            'password' => 'رمز عبور وارد شده اشتباه است'
-        ]);
-    }
 
-    return response([
-        'message' => 'ورود به حساب کاربری با موفقیت انجام شد',
-        'data' => $user
-    ]);
-});
 
-Route::post('/logout', function () {
-    auth()->logout();
-    return response([
-        'message' => 'شما با موفقیت خارج شدید'
-    ]);
-});
+
+
+// Route::post('/login', function (Request $request) {
+//     $user = User::where('email', $request->email)->first();
+//     if (!$user) {
+//         throw ValidationException::withMessages([
+//             'email' => 'کاربری با ایمیل وارد شده پیدا نشد'
+//         ]);
+//     }
+//     if (Hash::check($request->password, $user->password)) {
+//         auth()->login($user);
+//     } else {
+//         throw ValidationException::withMessages([
+//             'password' => 'رمز عبور وارد شده اشتباه است'
+//         ]);
+//     }
+
+//     return response([
+//         'message' => 'ورود به حساب کاربری با موفقیت انجام شد',
+//         'data' => $user
+//     ]);
+// });
+
+// Route::post('/logout', function () {
+//     auth()->logout();
+//     return response([
+//         'message' => 'شما با موفقیت خارج شدید'
+//     ]);
+// });

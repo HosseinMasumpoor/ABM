@@ -3,10 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
+
+// use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -21,6 +25,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'otp_code',
+        'otp_expires_at'
     ];
 
     /**
@@ -66,5 +72,10 @@ class User extends Authenticatable
     public function rates()
     {
         return $this->hasMany(Rate::class);
+    }
+
+    public function getOtpCodeAttribute()
+    {
+        return now()->lt($this->attributes['otp_expires_at']) ? $this->attributes['otp_code'] : null;
     }
 }
