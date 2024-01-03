@@ -122,4 +122,6 @@ return [
 
     'otp_expiration_time' => env('OTP_EXPIRATION_TIME', 120),
 
+    'otp_cache_key_prefix' => env('OTP_CACHE_KEY_PREFIX', 'otp-code-for-email-'),
+
 ];

@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
-class SendOTPRequest extends FormRequest
+class SetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
+        $user = auth()->user();
+
+        if ($user->password)
+            return false;
         return true;
     }
 
@@ -22,7 +27,7 @@ class SendOTPRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->uncompromised()]
         ];
     }
 }

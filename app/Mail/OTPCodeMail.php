@@ -27,7 +27,7 @@ class OTPCodeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'OTP Code Mail',
+            subject: 'کد یک بار مصرف شما برای ورود به سایت',
         );
     }
 

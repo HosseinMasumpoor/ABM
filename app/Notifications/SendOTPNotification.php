@@ -34,7 +34,8 @@ class SendOTPNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->view('emails.OTPCode', ['code' => $this->code]);
+            ->view('emails.OTPCode', ['code' => $this->code])
+            ->subject('کد یک بار مصرف شما برای ورود به سایت');
 
         // ->line('کد ورود شما :')
         // ->line($this->code)

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SendOTPRequest extends FormRequest
+class ChagnePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class SendOTPRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
+            'old_password' => 'required',
+            'password' => 'required|confirmed'
         ];
     }
 }
