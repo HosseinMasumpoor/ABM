@@ -26,12 +26,10 @@ class OrdersTableSeeder extends Seeder
             $order = Order::factory()->create([
                 'user_id' => $selectedUser->id,
                 'address_id' => $selectedUser->addresses->random()->id,
-                'total_price' => 0
+                'total_price' => 0,
+                'code' => generageOrderCode($selectedUser->id)
             ]);
-            $code = 1 . str_pad($order->id, 5, '0', STR_PAD_LEFT) . str_pad($selectedUser->id, 3, '0', STR_PAD_LEFT);
-            $order->update([
-                'code' => $code
-            ]);
+
             $totalPrice = 0;
             for ($j = 0; $j < random_int(1, 3); $j++) {
                 $selectedVariation = $productVariations->random();

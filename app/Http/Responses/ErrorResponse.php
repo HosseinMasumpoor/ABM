@@ -12,6 +12,7 @@ class ErrorResponse implements Responsable
     public function __construct(protected Throwable $e, protected string $message, protected int $code = Response::HTTP_INTERNAL_SERVER_ERROR, protected array $headers = [])
     {
     }
+
     public function toResponse($request)
     {
         $response = ['message' => $this->message];

@@ -5,9 +5,12 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\UserController;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -77,6 +80,8 @@ Route::get('/banners', [BannerController::class, 'showBanners']);
 
 Route::post('auth/login', [AuthController::class, 'login'])->name('login');
 
+Route::post('order', [OrderController::class, 'store'])->middleware('auth:api')->name('orders.store');
+
 Route::prefix('/auth')->name('auth.')->group(function () {
     Route::post('/check-email', [AuthController::class, 'checkEmail'])->name('email.check');
     Route::post('/send-otp', [AuthController::class, 'sendOTP'])->name('otp.send');
@@ -88,34 +93,7 @@ Route::prefix('/user')->middleware('auth:api')->group(function () {
     // Route::post('/change-email', [UserController::class, 'changeEmail'])->name('user.email.change');
 });
 
-
-
-
-
-// Route::post('/login', function (Request $request) {
-//     $user = User::where('email', $request->email)->first();
-//     if (!$user) {
-//         throw ValidationException::withMessages([
-//             'email' => 'کاربری با ایمیل وارد شده پیدا نشد'
-//         ]);
-//     }
-//     if (Hash::check($request->password, $user->password)) {
-//         auth()->login($user);
-//     } else {
-//         throw ValidationException::withMessages([
-//             'password' => 'رمز عبور وارد شده اشتباه است'
-//         ]);
-//     }
-
-//     return response([
-//         'message' => 'ورود به حساب کاربری با موفقیت انجام شد',
-//         'data' => $user
-//     ]);
-// });
-
-// Route::post('/logout', function () {
-//     auth()->logout();
-//     return response([
-//         'message' => 'شما با موفقیت خارج شدید'
-//     ]);
-// });
+Route::get('/test', function () {
+    Order::truncate();
+    OrderItem::truncate();
+});
