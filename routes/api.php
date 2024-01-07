@@ -87,10 +87,11 @@ Route::prefix('/auth')->name('auth.')->group(function () {
     Route::post('/send-otp', [AuthController::class, 'sendOTP'])->name('otp.send');
 });
 
-Route::prefix('/user')->middleware('auth:api')->group(function () {
-    Route::post('/change-password', [UserController::class, 'changePassword'])->name('user.password.change');
-    Route::post('/set-password', [UserController::class, 'setPassword'])->name('user.password.set');
-    // Route::post('/change-email', [UserController::class, 'changeEmail'])->name('user.email.change');
+Route::prefix('/user')->middleware('auth:api')->name('user.')->group(function () {
+    Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.change');
+    Route::post('/set-password', [UserController::class, 'setPassword'])->name('password.set');
+    Route::post('/change-email', [UserController::class, 'changeEmail'])->name('email.change');
+    Route::get('/change-email-verify', [UserController::class, 'changeEmailVerify'])->middleware('signed')->name('email.change.verify');
 });
 
 Route::get('/test', function () {

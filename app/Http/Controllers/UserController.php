@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeEmailRequest;
 use App\Http\Requests\User\ChagnePasswordRequest;
 use App\Http\Requests\User\SetPasswordRequest;
 use App\Http\Resources\AddressResource;
@@ -11,8 +12,10 @@ use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\User;
+use App\Notifications\EmailChangeNotification;
 use Hash;
 use Illuminate\Http\Request;
+use Notification;
 
 class UserController extends Controller
 {
@@ -56,6 +59,48 @@ class UserController extends Controller
             return new ErrorResponse($th, 'رمز عبور با موفقیت تغییر نکرد', 500);
         }
     }
+
+    public function changeEmail(ChangeEmailRequest $request)
+    {
+        $user = auth()->user();
+        try {
+            Notification::route('mail', $request->email)->notify(new EmailChangeNotification(auth()->id()));
+            return response([
+                'message' => 'ایمیل تأیید برای شما ارسال شد'
+            ]);
+        } catch (\Throwable $th) {
+            return new ErrorResponse($th, 'ایمیل با موفقیت تغییر نکرد', 500);
+        }
+    }
+
+    public function changeEmailVerify(Request $request)
+    {
+
+        $request->validate([
+            'email' => 'required|email|unique:users,email'
+        ]);
+
+        $user = auth()->user();
+
+        $user->update([
+            'email' => $request->email,
+            'email_verified_at' => now()
+        ]);
+
+        return response([
+            'message' => 'ایمیل با موفقیت تغییر پیدا کرد',
+            'email' => $request->email
+        ]);
+
+
+        try {
+        } catch (\Throwable $th) {
+            return new ErrorResponse($th, "تغییر ایمیل موفقیت آمیز نبود", 500);
+        }
+    }
+
+
+
 
     public function information()
     {
