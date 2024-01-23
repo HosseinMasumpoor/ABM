@@ -3,6 +3,7 @@
 if (!function_exists('generageOrderCode')) {
     function generageOrderCode($userId)
     {
-        return 1 . str_pad($userId, 5, '0', STR_PAD_LEFT) . time();
+        $random = random_int(100, 999);
+        return 1 . $random . str_pad($userId, 5, '0', STR_PAD_LEFT) . time();
     }
 }
