@@ -61,7 +61,7 @@ Route::prefix('/profile')->middleware('auth:api')->group(function () {
     Route::get('/comments', [UserController::class, 'showComments']);
 });
 
-Route::prefix('/admin')->middleware('auth:api')->group(function () {
+Route::prefix('/admin')->middleware(['auth:api', 'admin'])->group(function () {
     Route::apiResource('sliders', SliderController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('categories', CategoryController::class);

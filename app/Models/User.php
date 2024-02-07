@@ -29,7 +29,8 @@ class User extends Authenticatable
         'otp_code',
         'otp_expires_at',
         'email_verified_at',
-        'is_active'
+        'is_active',
+        'is_admin'
     ];
 
     /**
