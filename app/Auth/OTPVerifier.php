@@ -15,7 +15,7 @@ class OTPVerifier
 
         // User Registered And Want To Login
         if ($user) {
-            if ($user->otp_code && $user->otp_code == $code) {
+            if ($user->otp_code && $user->otp_code == $code && $user->otp_expires_at > now()) {
                 try {
                     $user->update([
                         'otp_code' => null,

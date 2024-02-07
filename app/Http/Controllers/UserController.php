@@ -43,7 +43,7 @@ class UserController extends Controller
         $user = auth()->user();
 
         if ($request->code) {
-            if (empty($user->otp_code)) {
+            if (empty($user->otp_code) || $user->otp_expires_at < now()) {
 
                 return response([
                     'message' => 'لطفا درخواست رمز یکبار مصرف بدهید'

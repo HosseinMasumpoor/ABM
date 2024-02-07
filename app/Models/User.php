@@ -82,4 +82,9 @@ class User extends Authenticatable
     {
         return now()->lt($this->attributes['otp_expires_at']) ? $this->attributes['otp_code'] : null;
     }
+
+    public function getRoleAttribute()
+    {
+        return $this->attributes['is_admin'] ? 'admin' : 'profile';
+    }
 }
