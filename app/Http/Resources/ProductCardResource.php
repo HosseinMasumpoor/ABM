@@ -17,6 +17,7 @@ class ProductCardResource extends JsonResource
         return [
             "id" => $this->id,
             "slug" => $this->slug,
+            "rate" => $this->rate,
             "name" => $this->name,
             "image" => $this->image,
             "price" => $this->price,
@@ -26,7 +27,7 @@ class ProductCardResource extends JsonResource
             "off_date_from" => $this->off_date_from,
             "off_date_to" => $this->off_date_to,
             "is_available" => $this->isAvailable,
-            "created_at" => $this->created_at
+            "created_at" => $this->created_at,
         ];
     }
 }

@@ -25,4 +25,15 @@ class Banner extends Model
         }
         return $this->attributes['src'];
     }
+
+    public function scopeFilter($query)
+    {
+        if (request()->has('type')) {
+            $query->where('type', request('type'));
+        }
+
+        if (request()->has('order')) {
+            $query->where('order', request('order'));
+        }
+    }
 }

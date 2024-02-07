@@ -43,7 +43,7 @@ class SliderObserver
     {
         $src = $slider->getRawOriginal('src');
         if (!Str::startsWith($src, env('SLIDER_IMAGE_UPLOAD_PATH') . '/test/'))
-            Storage::delete();
+            Storage::delete($src);
     }
 
     /**

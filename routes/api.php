@@ -39,8 +39,8 @@ Route::prefix('/products')->group(function () {
     Route::get('/show/{product}', [ProductController::class, 'show']);
     Route::get('/show/{product}/comments', [ProductController::class, 'showComments']);
 
-    Route::get('/filter/{category}', [ProductController::class, 'filter']);
-    Route::get('/getfilters/{category}', [ProductController::class, 'getFilters']);
+    Route::get('/filter/{category:slug}', [ProductController::class, 'filter']);
+    Route::get('/getfilters/{category:slug}', [ProductController::class, 'getFilters']);
     Route::get('/discounts', [ProductController::class, 'getDiscounts']);
     Route::get('/top-orders', [ProductController::class, 'topOrders']);
 });
@@ -53,7 +53,7 @@ Route::prefix('/categories')->group(function () {
 
 
 
-Route::prefix('/profile')->group(function () {
+Route::prefix('/profile')->middleware('auth:api')->group(function () {
     Route::get('/information', [UserController::class, 'information']);
     Route::get('/orders', [UserController::class, 'showOrders']);
     Route::get('/addresses', [UserController::class, 'showAddresses']);
@@ -61,7 +61,7 @@ Route::prefix('/profile')->group(function () {
     Route::get('/comments', [UserController::class, 'showComments']);
 });
 
-Route::prefix('/admin')->group(function () {
+Route::prefix('/admin')->middleware('auth:api')->group(function () {
     Route::apiResource('sliders', SliderController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('categories', CategoryController::class);
@@ -89,7 +89,7 @@ Route::prefix('/auth')->name('auth.')->group(function () {
 
 Route::prefix('/user')->middleware('auth:api')->name('user.')->group(function () {
     Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.change');
-    Route::post('/set-password', [UserController::class, 'setPassword'])->name('password.set');
+    // Route::post('/set-password', [UserController::class, 'setPassword'])->name('password.set');
     Route::post('/change-email', [UserController::class, 'changeEmail'])->name('email.change');
     Route::get('/change-email-verify', [UserController::class, 'changeEmailVerify'])->middleware('signed')->name('email.change.verify');
 });

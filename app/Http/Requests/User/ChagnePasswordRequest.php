@@ -22,7 +22,8 @@ class ChagnePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'old_password' => 'required',
+            'code' => 'required_without:old_password',
+            'old_password' => 'required_without:code',
             'password' => 'required|confirmed'
         ];
     }

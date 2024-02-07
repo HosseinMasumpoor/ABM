@@ -42,14 +42,30 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-        if (!Hash::check($request->old_password, $user->password)) {
-            return response([
-                'message' => 'رمز عبور وارد شده اشتباه است'
-            ], 401);
+        if ($request->code) {
+            if (empty($user->otp_code)) {
+
+                return response([
+                    'message' => 'لطفا درخواست رمز یکبار مصرف بدهید'
+                ]);
+            }
+            if ($request->code != $user->otp_code) {
+                return response([
+                    'message' => 'رمز یک بار مصرف وارد شده اشتباه است'
+                ]);
+            }
+        } else {
+
+            if (!Hash::check($request->old_password, $user->password)) {
+                return response([
+                    'message' => 'رمز عبور وارد شده اشتباه است'
+                ], 401);
+            }
         }
         try {
             $user->update([
-                'password' => $request->password
+                'password' => $request->password,
+                'otp_code' => null
             ]);
 
             return response([
@@ -100,38 +116,36 @@ class UserController extends Controller
     }
 
 
-
-
     public function information()
     {
-        $user = auth()->user() ?? User::find(3);
+        $user = auth()->user();
         $user = new UserResource($user);
         return $user;
     }
 
     public function showOrders(Request $request)
     {
-        $user = auth()->user() ?? User::find(3);
+        $user = auth()->user();
         $orders = OrderResource::collection($user->orders()->paginate($request->items_perpage ?? 10));
         return $orders;
     }
 
     public function showBookmarks(Request $request)
     {
-        $user = auth()->user() ?? User::find(3);
+        $user = auth()->user();
         return BookmarkResource::collection($user->bookmarks()->paginate($request->items_perpage ?? 10));
     }
 
     public function showAddresses(Request $request)
     {
-        $user = auth()->user() ?? User::find(3);
+        $user = auth()->user();
         $addresses = AddressResource::collection($user->addresses()->paginate($request->items_perpage ?? 10));
         return $addresses;
     }
 
     public function showComments(Request $request)
     {
-        $user = auth()->user() ?? User::find(3);
+        $user = auth()->user();
         return CommentResource::collection($user->comments()->paginate($request->items_perpage ?? 10));
     }
 }
