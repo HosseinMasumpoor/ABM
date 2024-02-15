@@ -20,8 +20,6 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "email_verified_at" => $this->email_verified_at,
             "created_at" => $this->created_at,
-            "otp_code" => null,
-            "otp_expires_at" => $this->otp_expires_at,
             "is_active" => $this->is_active,
             "is_admin" => $this->is_admin,
             "role" => $this->role
