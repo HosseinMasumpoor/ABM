@@ -47,12 +47,12 @@ class UserController extends Controller
 
                 return response([
                     'message' => 'لطفا درخواست رمز یکبار مصرف بدهید'
-                ]);
+                ], 400);
             }
             if ($request->code != $user->otp_code) {
                 return response([
                     'message' => 'رمز یک بار مصرف وارد شده اشتباه است'
-                ]);
+                ], 400);
             }
         } else {
 

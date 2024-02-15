@@ -59,7 +59,7 @@ class AuthController extends Controller
                 if ($otp) {
                     return response([
                         'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است'
-                    ]);
+                    ], 409);
                 }
                 $code = random_int(100000, 999999);
                 $user->notify(new SendOTPNotification($code));
@@ -72,9 +72,11 @@ class AuthController extends Controller
 
                 return response([
                     'message' => 'کد فعالسازی برای شما ارسال شد',
-                    'code' => $code
+                    'code' => $code,
+                    'expires_in' => (int) config('auth.otp_expiration_time')
                 ]);
             } catch (\Throwable $th) {
+
                 return new ErrorResponse($th, 'کد یک بار مصرف با موفقیت ارسال نشد', 500);
             }
         }
@@ -88,7 +90,7 @@ class AuthController extends Controller
         if (Cache::has(config('auth.otp_cache_key_prefix') . $email)) {
             return response([
                 'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است'
-            ]);
+            ], 409);
         }
 
         try {
