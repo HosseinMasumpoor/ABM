@@ -57,8 +57,10 @@ class AuthController extends Controller
             try {
                 $otp = $user->otp_code;
                 if ($otp) {
+                    $expiresIn = Carbon::parse($user->otp_expires_at)->diffInSeconds(now());
                     return response([
-                        'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است'
+                        'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است',
+                        'expires_in' => $expiresIn
                     ], 409);
                 }
                 $code = random_int(100000, 999999);
@@ -88,8 +90,10 @@ class AuthController extends Controller
         $email = $request->email;
 
         if (Cache::has(config('auth.otp_cache_key_prefix') . $email)) {
+            $expiresIn = Cache::getTTL(config('auth.otp_cache_key_prefix') . $email);
             return response([
-                'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است'
+                'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است',
+                'expires_in' => $expiresIn
             ], 409);
         }
 
@@ -105,7 +109,8 @@ class AuthController extends Controller
 
             return response([
                 'message' => 'کد فعالسازی برای شما ارسال شد',
-                'code' => $code
+                'code' => $code,
+                'expires_in' => (int) config('auth.otp_expiration_time')
             ]);
         } catch (\Throwable $th) {
             return new ErrorResponse($th, 'کد یک بار مصرف با موفقیت ارسال نشد', 500);
