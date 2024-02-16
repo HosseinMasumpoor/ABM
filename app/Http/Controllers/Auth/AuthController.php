@@ -61,7 +61,7 @@ class AuthController extends Controller
                     return response([
                         'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است',
                         'expires_in' => $expiresIn
-                    ], 409);
+                    ], 200);
                 }
                 $code = random_int(100000, 999999);
                 $user->notify(new SendOTPNotification($code));
@@ -94,7 +94,7 @@ class AuthController extends Controller
             return response([
                 'message' => 'کد یک بار مصرف قبلا برای شما ارسال شده است',
                 'expires_in' => $expiresIn
-            ], 409);
+            ], 200);
         }
 
         try {
