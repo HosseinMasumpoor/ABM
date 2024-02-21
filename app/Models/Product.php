@@ -217,6 +217,11 @@ class Product extends Model
         return $query;
     }
 
+    public function scopeNotPrimaryImages()
+    {
+        return $this->hasMany(Image::class)->whereNot('src', $this->attributes['image']);
+    }
+
 
     function getSubCategoriesId()
     {

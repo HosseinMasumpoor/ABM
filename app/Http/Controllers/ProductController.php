@@ -32,7 +32,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::paginate($request->items_perpage ?? 10);
+        $products = Product::paginate($request->items_perpage ?? 12);
         $products = ProductCardResource::collection($products);
         return $products;
     }
@@ -41,7 +41,7 @@ class ProductController extends Controller
     {
         $categoryIds = $this->getCategoriesId($category);
         $categoryIds->push($category->id);
-        $products = $category->products()->filter($categoryIds)->paginate($request->items_perpage ?? 10)->withQueryString();
+        $products = $category->products()->filter($categoryIds)->paginate($request->items_perpage ?? 12)->withQueryString();
         $products = ProductCardResource::collection($products);
         return $products;
     }
@@ -233,12 +233,14 @@ class ProductController extends Controller
 
 
             if ($request->has('deletingImages')) {
-                $deletingImages = $product->images()->whereIn('id', $request->deletingImages)->get();
-                foreach ($deletingImages as $deletingImage) {
+                $deletingImages = $product->notPrimaryImages()->whereIn('id', $request->deletingImages);
+                $deletingImagesId = $deletingImages->pluck('id')->toArray();
+
+                foreach ($deletingImages->get() as $deletingImage) {
                     if (!Str::startsWith($deletingImage->src, env('PRODUCT_IMAGE_UPLOAD_PATH') . '/test/'))
                         Storage::delete($deletingImage->getRawOriginal('src'));
                 }
-                $product->images()->whereIn('id', $request->deletingImages)->delete();
+                $product->images()->whereIn('id', $deletingImagesId)->delete();
             }
 
             if ($images->isNotEmpty()) {
