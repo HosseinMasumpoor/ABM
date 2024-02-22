@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\CommentStoreRequest;
+use App\Http\Responses\ErrorResponse;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 
@@ -16,19 +18,23 @@ class CommentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CommentStoreRequest $request)
     {
-        //
+        $user = auth()->user();
+
+        try {
+            $comment = $user->comments()->create($request->all());
+        } catch (\Throwable $th) {
+            $message = 'ثبت نظر با موفقیت انجام نشد';
+            return new ErrorResponse($th, $message);
+        }
+
+        return response([
+            'message' => 'نظر شما با موفقیت ثبت شد',
+            'data' => $comment
+        ]);
     }
 
     /**

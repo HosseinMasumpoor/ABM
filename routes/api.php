@@ -5,6 +5,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
@@ -93,6 +94,11 @@ Route::prefix('/user')->middleware('auth:api')->name('user.')->group(function ()
     Route::post('/change-email', [UserController::class, 'changeEmail'])->name('email.change');
     Route::get('/change-email-verify', [UserController::class, 'changeEmailVerify'])->middleware('signed')->name('email.change.verify');
 });
+
+Route::prefix('/comment')->middleware('auth:api')->name('comment.')->group(function () {
+    Route::post('/', [CommentController::class, 'store'])->name('store');
+});
+
 
 Route::get('/test', function () {
     Order::truncate();
