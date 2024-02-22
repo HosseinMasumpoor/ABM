@@ -84,7 +84,7 @@ class BannerController extends Controller
                 'link' => $request->link,
                 'src' => $src ?? $banner->src,
                 'type' => $request->type,
-                'order' => $request->order ?? 0
+                'order' => $request->order
             ]);
         } catch (\Throwable $th) {
             $message = 'متأسفانه ویرایش بنر با موفقیت انجام نشد';

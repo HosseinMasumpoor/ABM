@@ -25,7 +25,7 @@ class BannerUpdateRequest extends FormRequest
             'type' => 'required|string',
             'src' => 'image:jpeg,png,jpg,gif,svg|max:2048',
             'link' => 'required|url',
-            'order' => 'nullable|numeric'
+            'order' => 'required|numeric'
         ];
     }
 }
