@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Bookmark\AddBookmarkRequest;
+use App\Http\Responses\ErrorResponse;
 use App\Models\Bookmark;
 use Illuminate\Http\Request;
 
@@ -15,20 +17,25 @@ class BookmarkController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AddBookmarkRequest $request)
     {
-        //
+
+        $user = auth()->user();
+
+        try {
+            $user->bookmarks()->create($request->all());
+        } catch (\Throwable $th) {
+            $message = 'محصول به لیست علاقه مندی ها اضافه نشد';
+            return new ErrorResponse($th, $message);
+        }
+
+        return response([
+            'message' => 'محصول به لیست علاقه مندی های شما افزوده شد'
+        ]);
     }
 
     /**

@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -97,6 +99,15 @@ Route::prefix('/user')->middleware('auth:api')->name('user.')->group(function ()
 
 Route::prefix('/comment')->middleware('auth:api')->name('comment.')->group(function () {
     Route::post('/', [CommentController::class, 'store'])->name('store');
+});
+
+Route::prefix('/bookmark')->middleware('auth:api')->name('bookmark.')->group(function () {
+    Route::post('/', [BookmarkController::class, 'store'])->name('store');
+});
+
+Route::prefix('/address')->middleware('auth:api')->name('address.')->group(function () {
+    Route::post('/', [AddressController::class, 'store'])->name('store');
+    Route::put('/{address}', [AddressController::class, 'update'])->name('update');
 });
 
 
