@@ -19,6 +19,7 @@ class CommentResource extends JsonResource
             'user' => $this->user->name,
             'rate' => $this->rate,
             'text' => $this->text,
+            'approved' => $this->approved,
             // 'product' => $this->whenLoaded('product', fn()=> new ProductCardResource($this->product)),
             'product' => $this->product,
             'time' => $this->created_at

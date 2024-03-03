@@ -120,7 +120,13 @@ class Product extends Model
 
     public function scopeHasDiscount($query)
     {
-        return $query->whereNotNull('offPrice')->whereColumn('offPrice', '<>', 'price')->where('off_date_from', '<', Carbon::now())->where('off_date_to', '>', Carbon::now());
+        return $query->whereNotNull('offPrice')
+            ->whereColumn('offPrice', '<>', 'price')
+            ->where('off_date_from', '<', Carbon::now())
+            ->where('off_date_to', '>', Carbon::now())
+            ->whereHas('sizes', function ($query) {
+                $query->where('stock', '>', 0);
+            });
     }
 
     public function scopeTopOrders($query)
