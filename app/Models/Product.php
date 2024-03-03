@@ -114,6 +114,14 @@ class Product extends Model
         return asset($src);
     }
 
+    public function getIsBookmarkedAttribute()
+    {
+        if (auth('api')->check()) {
+            return auth('api')->user()->bookmarks()->where('product_id', $this->attributes['id'])->count() > 0;
+        }
+        return false;
+    }
+
     /**
      * Scopes
      */

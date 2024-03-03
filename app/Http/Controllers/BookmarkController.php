@@ -25,17 +25,31 @@ class BookmarkController extends Controller
     {
 
         $user = auth()->user();
+        $bookmark = $user->bookmarks()->where('product_id', $request->product_id)->first();
 
-        try {
-            $user->bookmarks()->create($request->all());
-        } catch (\Throwable $th) {
-            $message = 'محصول به لیست علاقه مندی ها اضافه نشد';
-            return new ErrorResponse($th, $message);
+        if (!$bookmark) {
+            try {
+                $user->bookmarks()->create($request->all());
+            } catch (\Throwable $th) {
+                $message = 'محصول به لیست علاقه مندی ها اضافه نشد';
+                return new ErrorResponse($th, $message);
+            }
+
+            return response([
+                'message' => 'محصول به لیست علاقه مندی های شما افزوده شد'
+            ]);
+        } else {
+            try {
+                $bookmark->delete();
+            } catch (\Throwable $th) {
+                $message = 'محصول از لیست علاقه مندی ها حذف نشد';
+                return new ErrorResponse($th, $message);
+            }
+
+            return response([
+                'message' => 'محصول از لیست علاقه مندی ها حذف شد'
+            ]);
         }
-
-        return response([
-            'message' => 'محصول به لیست علاقه مندی های شما افزوده شد'
-        ]);
     }
 
     /**
