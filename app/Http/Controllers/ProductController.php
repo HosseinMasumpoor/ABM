@@ -187,7 +187,7 @@ class ProductController extends Controller
     public function showComments(Request $request, Product $product)
     {
 
-        $comments = CommentResource::collection($product->comments()->approved()->paginate($request->items_perpage ?? 8));
+        $comments = CommentResource::collection($product->comments()->filter()->paginate($request->items_perpage ?? 8));
         return $comments;
     }
 
