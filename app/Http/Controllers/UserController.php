@@ -147,6 +147,6 @@ class UserController extends Controller
     public function showComments(GetAllCommentsRequest $request)
     {
         $user = auth()->user();
-        return CommentResource::collection($user->comments()->filter()->paginate($request->items_perpage ?? 10));
+        return CommentResource::collection($user->comments()->filter()->latest()->paginate($request->items_perpage ?? 10));
     }
 }
