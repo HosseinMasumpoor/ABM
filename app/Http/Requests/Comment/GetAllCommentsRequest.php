@@ -23,7 +23,7 @@ class GetAllCommentsRequest extends FormRequest
      */
     public function rules(): array
     {
-        $validValues = implode(',', Comment::approvedValues);
+        $validValues = implode(',', Comment::APPROVED_VALUES);
         return [
             'approved' => ['nullable', 'in:' . $validValues]
         ];

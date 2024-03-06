@@ -11,7 +11,7 @@ class Comment extends Model
     use HasFactory;
     // protected $guarded = [];
 
-    const approvedValues = [0, 1, "null"];
+    const APPROVED_VALUES = [0, 1];
 
     protected $fillable = ['user_id', 'text', 'rate', 'product_id', 'is_anonymous', 'approved'];
 
@@ -27,17 +27,18 @@ class Comment extends Model
 
     public function scopeFilter($query)
     {
-        // dd(request()->get('approved'));
         if (request()->has('approved')) {
-            $approved = request()->get('approved') == "null" ? null : request()->get('approved');
-            $query->where('approved', $approved);
+            $approved = request()->get('approved');
+            if ($approved) {
+                $query->whereNotNull('approved');
+            } else {
+                $query->whereNull('approved');
+            }
         }
     }
 
-    protected static function booted()
+    public function scopeApproved($query)
     {
-        static::addGlobalScope('approved', function (Builder $builder) {
-            $builder->where('approved', 1);
-        });
+        $query->where('approved', 1);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeEmailRequest;
+use App\Http\Requests\Comment\GetAllCommentsRequest;
 use App\Http\Requests\User\ChagnePasswordRequest;
 use App\Http\Requests\User\SetPasswordRequest;
 use App\Http\Resources\AddressResource;
@@ -143,9 +144,9 @@ class UserController extends Controller
         return $addresses;
     }
 
-    public function showComments(Request $request)
+    public function showComments(GetAllCommentsRequest $request)
     {
         $user = auth()->user();
-        return CommentResource::collection($user->comments()->paginate($request->items_perpage ?? 10));
+        return CommentResource::collection($user->comments()->filter()->paginate($request->items_perpage ?? 10));
     }
 }

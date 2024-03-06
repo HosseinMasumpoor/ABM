@@ -18,13 +18,12 @@ class CommentController extends Controller
      */
     public function index(GetAllCommentsRequest $request)
     {
-        $comments = Comment::withoutGlobalScopes()->filter()->latest()->paginate($request->items_perpage ?? 8);
+        $comments = Comment::filter()->latest()->paginate($request->items_perpage ?? 8);
         return new CommentResourceCollection($comments);
     }
 
-    public function changeStatus(ChangeCommentStatusRequest $request, $id)
+    public function changeStatus(ChangeCommentStatusRequest $request, Comment $comment)
     {
-        $comment = Comment::withoutGlobalScopes()->findOrFail($id);
         try {
             $comment->update($request->validated());
         } catch (\Throwable $th) {
@@ -60,9 +59,8 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Comment $comment)
     {
-        $comment = Comment::withoutGlobalScopes()->findOrFail($id);
         return new CommentResource($comment);
     }
 
@@ -84,9 +82,8 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
-        $comment = Comment::withoutGlobalScopes()->findOrFail($id);
         try {
             $comment->delete();
         } catch (\Throwable $th) {

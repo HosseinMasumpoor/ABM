@@ -72,9 +72,9 @@ Route::prefix('/admin')->group(function () {
     Route::apiResource('banners', BannerController::class);
     Route::prefix('/comments')->name('comments.')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('all');
-        Route::get('/{id}', [CommentController::class, 'show'])->name('show');
-        Route::delete('/{id}', [CommentController::class, 'destroy'])->name('destroy');
-        Route::put('/change-status/{id}', [CommentController::class, 'changeStatus'])->name('status.change');
+        Route::get('/{comment}', [CommentController::class, 'show'])->name('show');
+        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
+        Route::put('/change-status/{comment}', [CommentController::class, 'changeStatus'])->name('status.change');
     });
 });
 
