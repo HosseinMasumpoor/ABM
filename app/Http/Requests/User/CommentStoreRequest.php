@@ -24,7 +24,8 @@ class CommentStoreRequest extends FormRequest
         return [
             'product_id' => 'required|exists:comments,id',
             'text' => 'required|min:2|max:300',
-            'rate' => 'required|numeric|min:0|max:5'
+            'rate' => 'required|numeric|min:0|max:5',
+            'is_anonymous' => 'required|boolean'
         ];
     }
 }

@@ -78,8 +78,11 @@ class CommentController extends Controller
      */
     public function update(UpdateUserCommentRequest $request, Comment $comment)
     {
+        $data = collect($request->validated())->merge([
+            'approved' => null
+        ]);
         try {
-            $comment->update($request->validated());
+            $comment->update($data->toArray());
         } catch (\Throwable $th) {
             return new ErrorResponse($th, 'ویرایش نظر با موفقیت انجام نشد');
         }

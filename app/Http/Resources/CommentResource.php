@@ -18,6 +18,7 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'user' => $this->user->name,
             'rate' => $this->rate,
+            'is_anonymous' => $this->is_anonymous,
             'text' => $this->text,
             'approved' => $this->approved,
             // 'product' => $this->whenLoaded('product', fn()=> new ProductCardResource($this->product)),
