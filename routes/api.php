@@ -62,6 +62,8 @@ Route::prefix('/profile')->middleware('auth:api')->group(function () {
     Route::get('/addresses', [UserController::class, 'showAddresses']);
     Route::get('/bookmarks', [UserController::class, 'showBookmarks']);
     Route::get('/comments', [UserController::class, 'showComments']);
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('comment.owner');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->middleware('comment.owner');
 });
 
 Route::prefix('/admin')->group(function () {

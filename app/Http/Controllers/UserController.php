@@ -12,7 +12,6 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ErrorResponse;
-use App\Models\User;
 use App\Notifications\EmailChangeNotification;
 use Hash;
 use Illuminate\Http\Request;

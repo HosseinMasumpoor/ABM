@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Comment\ChangeCommentStatusRequest;
 use App\Http\Requests\Comment\GetAllCommentsRequest;
+use App\Http\Requests\Comment\UpdateUserCommentRequest;
 use App\Http\Requests\User\CommentStoreRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\CommentResourceCollection;
@@ -75,8 +76,16 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(UpdateUserCommentRequest $request, Comment $comment)
     {
+        try {
+            $comment->update($request->validated());
+        } catch (\Throwable $th) {
+            return new ErrorResponse($th, 'ویرایش نظر با موفقیت انجام نشد');
+        }
+        return response([
+            'message' => 'نظر با موفقیت ویرایش شد'
+        ]);
     }
 
     /**
