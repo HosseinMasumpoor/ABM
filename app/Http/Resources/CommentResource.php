@@ -16,7 +16,7 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->user->name,
+            'user' => $this->is_anonymous ? null : $this->user->name,
             'rate' => $this->rate,
             'is_anonymous' => $this->is_anonymous,
             'text' => $this->text,
