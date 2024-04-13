@@ -72,6 +72,7 @@ Route::prefix('/admin')->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('brands', BrandController::class);
     Route::apiResource('banners', BannerController::class);
+    Route::get('/users', [UserController::class, 'index']);
     Route::prefix('/comments')->name('comments.')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('all');
         Route::get('/{comment}', [CommentController::class, 'show'])->name('show');

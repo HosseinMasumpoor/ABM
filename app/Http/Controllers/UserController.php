@@ -12,6 +12,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ErrorResponse;
+use App\Models\User;
 use App\Notifications\EmailChangeNotification;
 use Hash;
 use Illuminate\Http\Request;
@@ -19,6 +20,11 @@ use Notification;
 
 class UserController extends Controller
 {
+    public function index(Request $request)
+    {
+        $users = UserResource::collection(User::paginate($request->items_perpage ?? 12));
+        return $users;
+    }
 
     public function setPassword(SetPasswordRequest $request)
     {
