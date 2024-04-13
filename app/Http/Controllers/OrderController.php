@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Order\OrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -17,9 +18,10 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $orders = OrderResource::collection(Order::orderBy('id', 'desc')->paginate($request->items_perpage ?? 12));
+        return $orders;
     }
 
     /**
