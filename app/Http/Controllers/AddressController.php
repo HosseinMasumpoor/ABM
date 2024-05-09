@@ -26,7 +26,7 @@ class AddressController extends Controller
         $user = auth()->user();
 
         try {
-            $address = $user->addresses()->create($request->all());
+            $address = $user->addresses()->create($request->validated());
         } catch (\Throwable $th) {
             $message = 'افزودن آدرس موفقیت آمیز نبود';
             return new ErrorResponse($th, $message);
@@ -54,7 +54,7 @@ class AddressController extends Controller
         $user = auth()->user();
 
         try {
-            $address->update($request->all());
+            $address->update($request->validated());
         } catch (\Throwable $th) {
             $message = 'ویرایش آدرس موفقیت آمیز نبود';
             return new ErrorResponse($th, $message);
@@ -71,6 +71,11 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
-        //
+        try {
+            $address->delete();
+        } catch (\Throwable $th) {
+            $message = "حذف به درستی انجام نشد، دوباره تلاش کنید";
+            return new ErrorResponse($th, $message);
+        }
     }
 }

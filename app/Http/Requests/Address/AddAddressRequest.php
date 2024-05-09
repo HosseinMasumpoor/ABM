@@ -30,6 +30,8 @@ class AddAddressRequest extends FormRequest
             'province' => 'required|string',
             'city' => 'required|string',
             'address' => 'required|min:5|max:400',
+            'number' => 'required|numeric',
+            'unit' => 'nullable|numeric',
             'name' => 'required',
         ];
     }

@@ -18,6 +18,8 @@ class Address extends Model
         "province",
         "city",
         "address",
+        "number",
+        "unit",
         "name"
     ];
 
