@@ -9,7 +9,7 @@ use App\Http\Requests\User\SetPasswordRequest;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\BookmarkResource;
 use App\Http\Resources\CommentResource;
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\Profile\OrderResource;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\User;
