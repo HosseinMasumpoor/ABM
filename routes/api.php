@@ -59,6 +59,7 @@ Route::prefix('/categories')->group(function () {
 Route::prefix('/profile')->middleware('auth:api')->group(function () {
     Route::get('/information', [UserController::class, 'information']);
     Route::get('/orders', [UserController::class, 'showOrders']);
+    Route::get('/orders/{order}', [UserController::class, 'showOrder']);
     Route::get('/addresses', [UserController::class, 'showAddresses']);
     Route::get('/bookmarks', [UserController::class, 'showBookmarks']);
     Route::get('/comments', [UserController::class, 'showComments']);
@@ -74,6 +75,7 @@ Route::prefix('/admin')->group(function () {
     Route::apiResource('banners', BannerController::class);
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders/{order}', [OrderController::class, 'show']);
     Route::prefix('/comments')->name('comments.')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('all');
         Route::get('/{comment}', [CommentController::class, 'show'])->name('show');
@@ -118,6 +120,7 @@ Route::prefix('/bookmark')->middleware('auth:api')->name('bookmark.')->group(fun
 Route::prefix('/address')->middleware('auth:api')->name('address.')->group(function () {
     Route::post('/', [AddressController::class, 'store'])->name('store');
     Route::put('/{address}', [AddressController::class, 'update'])->name('update');
+    Route::delete('/{addressModel}', [AddressController::class, 'destroy'])->name('delete');
 });
 
 

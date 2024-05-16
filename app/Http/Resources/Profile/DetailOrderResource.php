@@ -7,7 +7,7 @@ use App\Http\Resources\Profile\OrderItemResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class DetailOrderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,8 +19,8 @@ class OrderResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'orderItems' => OrderItemResource::collection($this->orderItems),
-            // 'address' => new AddressResource($this->address),
+            'orderItems' => DetailOrderItemResource::collection($this->orderItems),
+            'address' => new AddressResource($this->address),
             'total_price' => $this->total_price,
             'status' => $this->status,
             'payment_status' => $this->payment_status,

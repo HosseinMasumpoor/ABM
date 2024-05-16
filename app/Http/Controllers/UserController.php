@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeEmailRequest;
 use App\Http\Requests\Comment\GetAllCommentsRequest;
+use App\Http\Requests\Order\ShowOrderRequest;
 use App\Http\Requests\User\ChagnePasswordRequest;
 use App\Http\Requests\User\SetPasswordRequest;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\BookmarkResource;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\Profile\DetailOrderResource;
 use App\Http\Resources\Profile\OrderResource;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ErrorResponse;
+use App\Models\Order;
 use App\Models\User;
 use App\Notifications\EmailChangeNotification;
 use Hash;
@@ -134,6 +137,12 @@ class UserController extends Controller
         $user = auth()->user();
         $orders = OrderResource::collection($user->orders()->paginate($request->items_perpage ?? 10));
         return $orders;
+    }
+
+    public function showOrder(ShowOrderRequest $request, Order $order)
+    {
+        $order = new DetailOrderResource($order);
+        return $order;
     }
 
     public function showBookmarks(Request $request)

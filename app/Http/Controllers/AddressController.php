@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Address\AddAddressRequest;
+use App\Http\Requests\Address\DeleteAddressRequest;
 use App\Http\Requests\Address\EditAddressRequest;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Address;
@@ -69,13 +70,16 @@ class AddressController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Address $address)
+    public function destroy(DeleteAddressRequest $request, Address $addressModel)
     {
         try {
-            $address->delete();
+            $addressModel->delete();
         } catch (\Throwable $th) {
             $message = "حذف به درستی انجام نشد، دوباره تلاش کنید";
             return new ErrorResponse($th, $message);
         }
+        return response([
+            'message' => 'آدرس با موفقیت حذف شد'
+        ]);
     }
 }

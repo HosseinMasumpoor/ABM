@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Order\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\Profile\DetailOrderResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -86,7 +87,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return new DetailOrderResource($order);
     }
 
 

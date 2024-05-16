@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Profile;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,7 +16,7 @@ class OrderItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'product_image' => $this->product->image,
+            'product_image' => $this->product->image
         ];
     }
 }

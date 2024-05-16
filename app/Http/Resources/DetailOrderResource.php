@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Profile;
+namespace App\Http\Resources;
 
-use App\Http\Resources\AddressResource;
-use App\Http\Resources\Profile\OrderItemResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class DetailOrderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,8 +17,9 @@ class OrderResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'orderItems' => OrderItemResource::collection($this->orderItems),
-            // 'address' => new AddressResource($this->address),
+            'orderItems' => DetailOrderItemResource::collection($this->orderItems),
+            'user' => $this->user,
+            'address_id' => $this->address_id,
             'total_price' => $this->total_price,
             'status' => $this->status,
             'payment_status' => $this->payment_status,

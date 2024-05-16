@@ -87,4 +87,9 @@ class User extends Authenticatable
     {
         return $this->attributes['is_admin'] ? 'admin' : 'profile';
     }
+
+    public function isAdmin()
+    {
+        return $this->is_admin == 1;
+    }
 }
