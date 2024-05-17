@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Order\OrderRequest;
 use App\Http\Resources\OrderResource;
-use App\Http\Resources\Profile\DetailOrderResource;
+use App\Http\Resources\DetailOrderResource;
 use App\Http\Responses\ErrorResponse;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -54,6 +54,7 @@ class OrderController extends Controller
             ]);
 
             foreach ($result as $cartItem) {
+                $product = Product::find($cartItem["id"]);
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cartItem["id"],
@@ -61,7 +62,12 @@ class OrderController extends Controller
                     'size' => $cartItem["sizes"]["size"],
                     'price' => $cartItem["offPrice"],
                     'quantity' => $cartItem["quantity"],
-                    'subtotal' => $cartItem["quantity"] * $cartItem["offPrice"],
+                    'subtotal' => $cartItem["quantity"] * $cartItem["price"],
+                    'product_name' => $product->name,
+                    'product_price' => $product->price,
+                    'product_offPrice' => $product->offPrice,
+                    'product_color' => $product->color,
+                    'product_colorCode' => $product->colorCode
                 ]);
 
                 // Update Stock

@@ -18,8 +18,12 @@ class DetailOrderResource extends JsonResource
         return [
             'id' => $this->id,
             'orderItems' => DetailOrderItemResource::collection($this->orderItems),
-            'user' => $this->user,
-            'address_id' => $this->address_id,
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'profile' => null,
+            ],
+            'address' => $this->address,
             'total_price' => $this->total_price,
             'status' => $this->status,
             'payment_status' => $this->payment_status,

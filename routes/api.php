@@ -125,6 +125,14 @@ Route::prefix('/address')->middleware('auth:api')->name('address.')->group(funct
 
 
 Route::get('/test', function () {
-    Order::truncate();
-    OrderItem::truncate();
+    $orderItems = OrderItem::all();
+    foreach ($orderItems as $item) {
+        $item->update([
+            'product_name' => $item->product->name,
+            'product_price' => $item->product->price,
+            'product_offPrice' => $item->product->offPrice,
+            'product_color' => $item->product->color,
+            'product_colorCode' => $item->product->colorCode
+        ]);
+    }
 });
