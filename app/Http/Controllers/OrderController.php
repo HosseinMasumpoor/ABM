@@ -31,9 +31,9 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         $result =  $this->checkCart($request->items);
-        // if (count($result["errors"]) > 0) {
-        //     return $result;
-        // }
+        if (count($result["errors"]) > 0) {
+            return $result;
+        }
 
         // Deletes Error Messages From Cart Items Array
         unset($result["errors"]);
@@ -62,7 +62,7 @@ class OrderController extends Controller
                     'size' => $cartItem["sizes"]["size"],
                     'price' => $cartItem["offPrice"],
                     'quantity' => $cartItem["quantity"],
-                    'subtotal' => $cartItem["quantity"] * $cartItem["price"],
+                    'subtotal' => $cartItem["quantity"] * $cartItem["offPrice"],
                     'product_name' => $product->name,
                     'product_price' => $product->price,
                     'product_offPrice' => $product->offPrice,
@@ -204,7 +204,9 @@ class OrderController extends Controller
                 array_push($error, $message);
             }
             $cartItems[$index]["messages"] = $error;
-            $errors->push($error);
+
+            if (count($error))
+                $errors->push($error);
         }
         $cartItems["errors"] = $errors->toArray();
 
