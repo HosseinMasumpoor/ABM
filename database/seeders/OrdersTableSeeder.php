@@ -17,12 +17,17 @@ class OrdersTableSeeder extends Seeder
     public function run(): void
     {
         //
+        Order::truncate();
+        OrderItem::truncate();
         $counter = 0;
         $productVariations = Size::all();
         $users = User::all();
         for ($i = 0; $i < 20; $i++) {
             $counter++;
             $selectedUser = $users->random();
+            while ($selectedUser->addresses()->count() == 0) {
+                $selectedUser = $users->random();
+            }
             $order = Order::factory()->create([
                 'user_id' => $selectedUser->id,
                 'address_id' => $selectedUser->addresses->random()->id,
@@ -33,17 +38,24 @@ class OrdersTableSeeder extends Seeder
             $totalPrice = 0;
             for ($j = 0; $j < random_int(1, 3); $j++) {
                 $selectedVariation = $productVariations->random();
-                $price = $selectedVariation->product->price;
-                $totalPrice += $price;
+                $product = $selectedVariation->product;
+                $offPrice = $product->offPrice;
                 $quantity = random_int(1, 3);
+                $subtotal = $offPrice * $quantity;
+                $totalPrice += $subtotal;
                 OrderItem::factory()->create([
                     'order_id' => $order->id,
                     'size_id' => $selectedVariation->id,
                     'product_id' => $selectedVariation->product,
                     'size' => $selectedVariation->size,
-                    'price' => $price,
+                    'price' => $offPrice,
                     'quantity' => $quantity,
-                    'subtotal' => $price * $quantity,
+                    'subtotal' => $offPrice * $quantity,
+                    'product_name' => $product->name,
+                    'product_price' => $product->price,
+                    'product_offPrice' => $product->offPrice,
+                    'product_color' => $product->color,
+                    'product_colorCode' => $product->colorCode,
                 ]);
             }
             $order->update([
