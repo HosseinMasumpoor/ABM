@@ -28,7 +28,8 @@ class AddressFactory extends Factory
             'title' => $titles->random(),
             'name' => Faker::fullName(),
             'cellphone' => Faker::mobile(),
-            'postalCode' => '3190000000'
+            'postalCode' => '3190000000',
+            'number' => $this->faker->numberBetween(1, 100)
         ];
     }
 }

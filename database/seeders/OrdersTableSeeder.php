@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Size;
@@ -25,9 +26,12 @@ class OrdersTableSeeder extends Seeder
         for ($i = 0; $i < 20; $i++) {
             $counter++;
             $selectedUser = $users->random();
-            while ($selectedUser->addresses()->count() == 0) {
-                $selectedUser = $users->random();
+            if ($selectedUser->addresses()->count() == 0) {
+                Address::factory()->for($selectedUser)->create();
             }
+            // while ($selectedUser->addresses()->count() == 0) {
+            //     $selectedUser = $users->random();
+            // }
             $order = Order::factory()->create([
                 'user_id' => $selectedUser->id,
                 'address_id' => $selectedUser->addresses->random()->id,
